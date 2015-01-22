@@ -30,9 +30,11 @@ class Reporte extends CI_Controller {
 				$rDatos = false;
 			}
 			
-			$ejemplaresElectronicos = $this->reporte->leerEjemplaresElectronicos($revista->id_revista);
-			if(!$ejemplaresElectronicos) {
-				$rEjemplares = false;
+			if($revista->tipo_solicitud != 3) {  // No se considera cuando es renovación automática
+				$ejemplaresElectronicos = $this->reporte->leerEjemplaresElectronicos($revista->id_revista);
+				if(!$ejemplaresElectronicos) {
+					$rEjemplares = false;
+				}
 			}
 			
 			if(!$revista->institucion || !$revista->calle_numero || !$revista->colonia || !$revista->pais || !$revista->entidad || !$revista->ciudad || !$revista->codigo_postal) {
