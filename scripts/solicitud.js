@@ -951,12 +951,14 @@ function validarEnvio() {
 			}
 		});
 		
-		$("#num_ejemplares").rules('add', {
-			min: 2,
-			messages: {
-				min: "Debes agregar los datos de los ejemplares solicitados"
-			}
-		});
+		if($("#btnMasURL").is(":visible")) {
+			$("#num_ejemplares").rules('add', {
+				min: 2,
+				messages: {
+					min: "Debes agregar los datos de los ejemplares solicitados"
+				}
+			});
+		}
 		
 		$("#institucion_revista").rules('add', {
 			required: true,
