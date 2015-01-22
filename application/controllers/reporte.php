@@ -205,7 +205,7 @@ class Reporte extends CI_Controller {
 				} else if($val->tipo == 'a') {
 					$manuscritos_aceptados = new stdClass();
 					$manuscritos_aceptados->ruta = $val->ruta;
-					$ma = $manuscritos_aceptados;
+					$ma[] = $manuscritos_aceptados;
 				}
 			}
 		}
