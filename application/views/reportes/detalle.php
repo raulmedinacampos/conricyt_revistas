@@ -456,7 +456,7 @@ table td {
 	?>
       <tr>
         <td><strong><?php echo 'Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.str_replace(" ", "_", $mr->ruta)).'">'.$mr->ruta."</a>"; ?></strong></td>
--      </tr>
+      </tr>
       <?php
 	}
   } else {
@@ -477,7 +477,7 @@ table td {
 	?>
       <tr>
         <td><strong><?php echo 'Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.str_replace(" ", "_", $ma->ruta)).'">'.$ma->ruta."</a>"; ?></strong></td>
--      </tr>
+      </tr>
       <?php
 	}
   } else {
