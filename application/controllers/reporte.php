@@ -190,6 +190,29 @@ class Reporte extends CI_Controller {
 		$data['articulos'] = $this->reporte->leerArticulos($datos->id_solicitud);
 		$data['paises'] = $this->reporte->leerPaises($datos->id_solicitud);
 		
+		$mr = array();
+		$ma = array();
+		
+		$manuscritos = $this->reporte->leerManuscritos($datos->id_solicitud);
+		if($manuscritos) {
+			$manuscritos = $manuscritos->result();
+			
+			foreach($manuscritos as $val) {
+				if($val->tipo == 'r') {
+					$manuscritos_rechazados = new stdClass();
+					$manuscritos_rechazados->ruta = $val->ruta;
+					$mr[] = $manuscritos_rechazados;
+				} else if($val->tipo == 'a') {
+					$manuscritos_aceptados = new stdClass();
+					$manuscritos_aceptados->ruta = $val->ruta;
+					$ma = $manuscritos_aceptados;
+				}
+			}
+		}
+		
+		$data['manuscritos_rechazados'] = $mr;
+		$data['manuscritos_aceptados'] = $ma; 
+		
 		$data['anexos'] = $this->reporte->leerAnexos($datos->id_solicitud);
 		
 		$this->load->view('header');

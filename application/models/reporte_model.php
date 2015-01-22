@@ -123,6 +123,19 @@ class Reporte_model extends CI_Model {
 		return $query;
 	}
 	
+	public function leerManuscritos($solicitud) {
+		$this->db->select('id_manuscrito, tipo, ruta');
+		$this->db->from('manuscrito');
+		$this->db->where('solicitud', $solicitud);
+		$this->db->where('estatus', 1);
+		$this->db->order_by('tipo, ruta');
+		$query = $this->db->get();
+	
+		if($query->num_rows() > 0) {
+			return $query;
+		}
+	}
+	
 	public function leerAnexos($solicitud) {
 		$this->db->select('id_anexo, descripcion, ruta_anexo');
 		$this->db->from('anexo');

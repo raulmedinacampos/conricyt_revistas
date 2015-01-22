@@ -447,6 +447,48 @@ table td {
           </strong></td>
       </tr>
     </table>
+    
+    <h5><strong>Manuscritos rechazados</strong></h5>
+    <table class="table table-condensed table-striped">
+      <?php
+  if($manuscritos_rechazados) {
+	foreach($manuscritos_rechazados as $mr) {
+	?>
+      <tr>
+        <td><strong><?php echo 'Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.str_replace(" ", "_", $mr->ruta)).'">'.$mr->ruta."</a>"; ?></strong></td>
+-      </tr>
+      <?php
+	}
+  } else {
+  ?>
+      <tr>
+        <td colspan="2"><strong>No hay más manuscritos rechazados</strong></td>
+      </tr>
+      <?php
+  }
+  ?>
+    </table>
+    
+    <h5><strong>Manuscritos aceptados</strong></h5>
+    <table class="table table-condensed table-striped">
+      <?php
+  if($manuscritos_aceptados) {
+	foreach($manuscritos_aceptados as $ma) {
+	?>
+      <tr>
+        <td><strong><?php echo 'Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.str_replace(" ", "_", $ma->ruta)).'">'.$ma->ruta."</a>"; ?></strong></td>
+-      </tr>
+      <?php
+	}
+  } else {
+  ?>
+      <tr>
+        <td colspan="2"><strong>No hay más manuscritos aceptados</strong></td>
+      </tr>
+      <?php
+  }
+  ?>
+    </table>
   </div>
 </div>
 <div class="panel panel-primary">
