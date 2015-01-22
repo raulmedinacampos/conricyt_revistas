@@ -12,25 +12,20 @@
     <th>Distribución electrónica</th>
     <th>Manuscritos</th>
     <th>Anexos</th>
+    <th>Estatus</th>
   </tr>
   <?php
   $i = 1;
   foreach($datos as $dato) {
 	$claseFondo = "";
-	$claseFinalizado = "";
 	
 	if($dato->tipo_solicitud == 3) {
 		$claseFondo = "#F0D58C";
-		$claseFinalizado = "#F0D58C";
-	}
-	
-	if($dato->estatus == 5) {
-		$claseFinalizado = "#DFF0D8";
 	}
   ?>
   <tr>
-    <td style="background-color: <?php echo $claseFinalizado; ?>"><?php echo $i; ?></td>
-    <td style="background-color: <?php echo $claseFinalizado; ?>"><a href="<?php echo base_url('reporte/detalle/'.$dato->id_revista); ?>"><?php echo $dato->nombre; ?></a></td>
+    <td style="background-color: <?php echo $claseFondo; ?>"><?php echo $i; ?></td>
+    <td style="background-color: <?php echo $claseFondo; ?>"><a href="<?php echo base_url('reporte/detalle/'.$dato->id_revista); ?>"><?php echo $dato->nombre; ?></a></td>
     <td style="background-color: <?php echo $claseFondo; ?>" class="text-center"><?php echo $dato->general; ?></td>
     <td style="background-color: <?php echo $claseFondo; ?>" class="text-center"><?php echo $dato->carta_postulacion; ?></td>
     <td style="background-color: <?php echo $claseFondo; ?>" class="text-center"><?php echo $dato->comite_editorial; ?></td>
@@ -39,6 +34,7 @@
     <td style="background-color: <?php echo $claseFondo; ?>" class="text-center"><?php echo $dato->distribucion; ?></td>
     <td style="background-color: <?php echo $claseFondo; ?>" class="text-center"><?php echo $dato->manuscritos; ?></td>
     <td style="background-color: <?php echo $claseFondo; ?>"><?php echo $dato->anexos; ?></td>
+    <td style="background-color: <?php echo $claseFondo; ?>"><?php echo ($dato->estatus_solicitud == 5) ? "Finalizada" : "En proceso"; ?></td>
   </tr>
   <?php
     $i++;
