@@ -19,6 +19,7 @@ class Reporte extends CI_Controller {
 			$datos->id_revista = $revista->id_revista;
 			$datos->tipo_solicitud = $revista->tipo_solicitud;
 			$datos->nombre = $revista->nombre;
+			$datos->estatus = $revista->estatus_solicitud;
 			
 			$rDatos = true;
 			$rEjemplares = true;

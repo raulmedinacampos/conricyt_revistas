@@ -20,6 +20,7 @@ class Reporte_model extends CI_Model {
 	}
 	
 	public function leerRevistas() {
+		$this->db->select("*, s.estatus AS estatus_solicitud");
 		$this->db->from('revista r');
 		$this->db->join('solicitud s', 'r.id_revista = s.revista');
 		$this->db->where('r.estatus', 1);

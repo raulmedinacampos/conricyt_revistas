@@ -16,7 +16,15 @@
   <?php
   $i = 1;
   foreach($datos as $dato) {
-	  $claseFondo = ($dato->tipo_solicitud == 3) ? "#F0D58C" : "";
+	$claseFondo = "";
+	
+	if($dato->tipo_solicitud == 3) {
+		$claseFondo = "#F0D58C";
+	}
+	
+	if($dato->estatus == 5) {
+		$claseFondo = "#DFF0D8";
+	}
   ?>
   <tr>
     <td style="background-color: <?php echo $claseFondo; ?>"><?php echo $i; ?></td>
