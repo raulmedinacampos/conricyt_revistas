@@ -180,7 +180,7 @@ class Solicitud extends CI_Controller {
 		$this->phpmailer->Password   = 'C0nR1c17p1x3l8lu3';
 			
 		$this->phpmailer->SetFrom('conricyt@gmail.com', 'CONRICyT');
-		$this->phpmailer->AddBCC('efloresga@conacyt.mx', "Eldaa Flores");
+		$this->phpmailer->AddBCC('montiveross@conacyt.mx', "Margarita Ontiveros");
 		$this->phpmailer->AddReplyTo('no-replay@conacyt.mx', 'CONRICyT');
 		$this->phpmailer->Subject    = utf8_encode($asunto);
 		$this->phpmailer->AltBody    = utf8_encode($asunto);
