@@ -668,9 +668,9 @@ function validarCambios() {
 		});
 		
 		$("input[name='articulo_articulo[]']").rules('add', {
-			digits: true,
+			pattern: /^[0-9\-\s]+$/,
 			messages: {
-				digits: "El número de artículo de los artículos más descargados debe ser numérico"
+				pattern: "El número de artículo de los artículos más descargados es inválido"
 			}
 		});
 		
@@ -1270,9 +1270,9 @@ function validarEnvio() {
 		});
 		
 		$("input[name='articulo_articulo[]']").rules('add', {
-			digits: true,
+			pattern: /^[0-9\-\s]+$/,
 			messages: {
-				digits: "El número de artículo de los artículos más descargados debe ser numérico"
+				pattern: "El número de artículo de los artículos más descargados es inválido"
 			}
 		});
 		
