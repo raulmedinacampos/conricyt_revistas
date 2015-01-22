@@ -1,0 +1,143 @@
+/* Estilos */
+
+body {
+	font-size: 12px;
+	background: #E7E7E7 url("../images/fondo.png") repeat-x;
+}
+
+#franja-azul {
+	padding: 0 10px;
+    width: 100%;
+    max-height: 212px;
+    min-height: 36px;
+	background-color: #2B69BD;
+}
+
+#contenedor.container {
+	padding: 0;
+	background-color: #FFFFFF;
+	min-height: 400px;
+	height: auto;
+	border-left: 1px #999999 solid;
+	border-right: 1px #999999 solid;
+	box-shadow: 0 0 20px #000000;
+}
+
+header {
+	background: #FFFFFF url("../images/top-bg.png") 445px bottom no-repeat;
+}
+
+#logotipos {
+	height: 173px;
+    position: relative;
+}
+
+#logotipos img {
+    position: absolute;
+    margin: auto 40px;
+	max-width: 65%;
+	height: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#divisor {
+	height: 30px;
+	background: #526D83 url("../images/grad-menu-bg.png") 0 0 repeat-x;
+    text-align: right;
+}
+
+#divisor div.container {
+	padding: 0px 50px;
+}
+
+footer {
+	padding-top: 20px;
+	background-color: #ECECEC;
+	border-top: 1px #CDCDCD solid;
+	color: #666666;
+}
+
+.nav-tabs {
+	margin-top: 30px;
+}
+
+.nav-tabs > li > a {
+	border: 1px #DDDDDD solid;
+}
+
+.nav-tabs > li:not(.active) > a {
+	background-color: #EDEDED;
+}
+
+fieldset legend {
+	margin-top: 15px;
+}
+
+#aviso-renovacion {
+	display: none;
+}
+
+.requerido:before {
+    content: "*";
+    margin-right: 2px;
+}
+
+.acceso-temporal {
+	display: none;
+}
+
+.conservar-documento {
+	display: none;
+	cursor: pointer;
+}
+
+.conservar-elemento, .quitar-elemento {
+	margin-left: 8px;
+	cursor: pointer;
+}
+
+.conservar-elemento {
+	color: #009900;
+}
+
+.quitar-elemento {
+	color: #FF0000;
+}
+
+.has-error .form-control {
+    background-color: #f1ccbd;
+}
+
+.table th:last-of-type, .table td:last-of-type {
+	text-align: center;
+}
+
+span.glyphicon-trash {
+	cursor: pointer;
+}
+
+/* Se sobreescribe el color del link para el botón de cerrar sesión y nueva solicitus */
+#franja-azul a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+/* Se sobreescribe el color de las filas */
+.table-striped>tbody>tr:nth-child(odd)>td,.table-striped>tbody>tr:nth-child(odd)>th{
+	background-color: #eaeaea;
+}
+
+@media screen and (min-width:768px){
+	.container {
+		padding: 25px 50px;
+	}
+}
+
+@media screen and (max-width:768px){
+	#logotipos img {
+		max-width: 80%;
+	}
+}
