@@ -411,30 +411,6 @@ table td {
   <div class="panel-body">
     <table class="table table-condensed table-striped">
       <tr>
-        <td>Manuscritos rechazados o condicionados</td>
-        <td><strong>
-          <?php
-    	if($revista->ruta_manuscritos_rechazados) {
-			echo 'Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.$revista->ruta_manuscritos_rechazados).'">'.$revista->ruta_manuscritos_rechazados."</a>";
-		} else {
-			echo "No se ha cargado archivo";
-		}
-    ?>
-          </strong></td>
-      </tr>
-      <tr>
-        <td>Manuscritos aceptados</td>
-        <td><strong>
-          <?php
-    	if($revista->ruta_manuscritos_aceptados) {
-			echo 'Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.$revista->ruta_manuscritos_aceptados).'">'.$revista->ruta_manuscritos_aceptados."</a>";
-		} else {
-			echo "No se ha cargado archivo";
-		}
-    ?>
-          </strong></td>
-      </tr>
-      <tr>
         <td>Formato de dictamen o formato libre</td>
         <td><strong>
           <?php
@@ -448,10 +424,13 @@ table td {
       </tr>
     </table>
     
-    <h5><strong>Manuscritos rechazados</strong></h5>
+    <h5><strong>Manuscritos rechazados o condicionados</strong></h5>
     <table class="table table-condensed table-striped">
       <?php
-  if($manuscritos_rechazados) {
+  if($revista->ruta_manuscritos_rechazados || $manuscritos_rechazados) {
+  	if($revista->ruta_manuscritos_rechazados) {
+  		echo '<tr><td><strong>Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.$revista->ruta_manuscritos_rechazados).'">'.$revista->ruta_manuscritos_rechazados."</a></strong></td></tr>";
+  	}
 	foreach($manuscritos_rechazados as $mr) {
 	?>
       <tr>
@@ -462,7 +441,7 @@ table td {
   } else {
   ?>
       <tr>
-        <td colspan="2"><strong>No hay más manuscritos rechazados</strong></td>
+        <td colspan="2"><strong>No se han cargado manuscritos rechazados</strong></td>
       </tr>
       <?php
   }
@@ -472,7 +451,10 @@ table td {
     <h5><strong>Manuscritos aceptados</strong></h5>
     <table class="table table-condensed table-striped">
       <?php
-  if($manuscritos_aceptados) {
+  if($revista->ruta_manuscritos_aceptados || $manuscritos_aceptados) {
+  	if($revista->ruta_manuscritos_aceptados) {
+  		echo '<tr><td><strong>Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.$revista->ruta_manuscritos_aceptados).'">'.$revista->ruta_manuscritos_aceptados."</a></strong></td></tr>";
+  	}
 	foreach($manuscritos_aceptados as $ma) {
 	?>
       <tr>
@@ -483,7 +465,7 @@ table td {
   } else {
   ?>
       <tr>
-        <td colspan="2"><strong>No hay más manuscritos aceptados</strong></td>
+        <td colspan="2"><strong>No se han cargadp manuscritos aceptados</strong></td>
       </tr>
       <?php
   }

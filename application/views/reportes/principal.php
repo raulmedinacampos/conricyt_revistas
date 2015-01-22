@@ -34,7 +34,7 @@
     <td style="background-color: <?php echo $claseFondo; ?>" class="text-center"><?php echo $dato->distribucion; ?></td>
     <td style="background-color: <?php echo $claseFondo; ?>" class="text-center"><?php echo $dato->manuscritos; ?></td>
     <td style="background-color: <?php echo $claseFondo; ?>"><?php echo $dato->anexos; ?></td>
-    <td style="background-color: <?php echo $claseFondo; ?>"><?php echo ($dato->estatus == 5) ? "Finalizada" : "En proceso"; ?></td>
+    <td style="background-color: <?php echo $claseFondo; ?>"><?php echo ($dato->estatus == 5) ? '<span class="glyphicon glyphicon-ok text-success"></span>' : ""; ?></td>
   </tr>
   <?php
     $i++;
