@@ -1036,16 +1036,18 @@ function validarEnvio() {
 			}
 		});
 		
-		$("#carta_postulacion").rules('add', {
-			required: true,
-			extension: "pdf",
-			filesize: 10485760,
-			messages: {
-				required: "Falta adjuntar la carta de postulación",
-				extension: "La carta de postulación debe estar en formato PDF",
-				filesize: "El tamaño máximo de la carta de postulación debe ser de 10 MB"
-			}
-		});
+		if($("#tipo_solicitud").val() != 3) {
+			$("#carta_postulacion").rules('add', {
+				required: true,
+				extension: "pdf",
+				filesize: 10485760,
+				messages: {
+					required: "Falta adjuntar la carta de postulación",
+					extension: "La carta de postulación debe estar en formato PDF",
+					filesize: "El tamaño máximo de la carta de postulación debe ser de 10 MB"
+				}
+			});
+		}
 		
 		$("#url_sistema_gestion").rules('add', {
 			required: function() {
