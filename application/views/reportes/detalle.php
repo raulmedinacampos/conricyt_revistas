@@ -144,11 +144,8 @@ table td {
         <td>&nbsp;</td>
       </tr>
     </table>
-    <?php
-    if($revista->tipo_solicitud != 3) {
-    ?>
-  	<p class="<?php echo (!$revista->ruta_carta_postulacion) ? "obligatorio" : ""; ?>">
-    	<span class="glyphicon glyphicon-asterisk"></span>Carta de postulación: <strong>
+  	<p>
+    	Carta de postulación: <strong>
         <?php
 			if($revista->ruta_carta_postulacion) {
 				echo 'Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.$revista->ruta_carta_postulacion).'">'.$revista->ruta_carta_postulacion."</a>";
@@ -159,7 +156,6 @@ table td {
       </strong>
     </p>
     <?php
-    }
     if($revista->tipo_solicitud == 3) {
     ?>
   	<p class="<?php echo (!$revista->ruta_carta_exencion) ? "obligatorio" : ""; ?>">
