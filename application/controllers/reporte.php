@@ -22,6 +22,7 @@ class Reporte extends CI_Controller {
 			$datos->tipo_solicitud = $revista->tipo_solicitud;
 			$datos->nombre = $revista->nombre;
 			$datos->estatus = $revista->estatus_solicitud;
+			$datos->carta_postulacion = "N/A";
 			$datos->comite_editorial = "N/A";
 			$datos->arbitraje = "N/A";
 			$datos->indices = "N/A";
@@ -65,13 +66,13 @@ class Reporte extends CI_Controller {
 				$datos->general = '<span class="glyphicon glyphicon-ok text-success"></span>';
 			}
 			
-			if($revista->ruta_carta_postulacion) {
-				$datos->carta_postulacion = '<span class="glyphicon glyphicon-ok text-success"></span>';
-			} else {
-				$datos->carta_postulacion = '<span class="glyphicon glyphicon-remove text-danger"></span>';
-			}
-			
 			if($revista->tipo_solicitud != 3) {
+				if($revista->ruta_carta_postulacion) {
+					$datos->carta_postulacion = '<span class="glyphicon glyphicon-ok text-success"></span>';
+				} else {
+					$datos->carta_postulacion = '<span class="glyphicon glyphicon-remove text-danger"></span>';
+				}
+				
 				if(!$revista->ruta_comite_editorial && !$revista->ruta_actas_acuerdos && !$revista->url_func_resp_norm) {
 					$datos->comite_editorial = '<span class="glyphicon glyphicon-remove text-danger"></span>';
 				}
