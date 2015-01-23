@@ -124,6 +124,17 @@ class Reporte_model extends CI_Model {
 	}
 	
 	public function leerManuscritos($solicitud) {
+		$this->db->select('id_manuscrito');
+		$this->db->from('manuscrito');
+		$this->db->where('solicitud', $solicitud);
+		$this->db->where('estatus', 1);
+		$this->db->group_by('tipo');
+		$query = $this->db->get();
+	
+		return $query->num_rows();
+	}
+	
+	public function leerManuscritosSolicitud($solicitud) {
 		$this->db->select('id_manuscrito, tipo, ruta');
 		$this->db->from('manuscrito');
 		$this->db->where('solicitud', $solicitud);

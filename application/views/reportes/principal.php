@@ -12,7 +12,7 @@
     <th>Distribución electrónica</th>
     <th>Manuscritos</th>
     <th>Anexos</th>
-    <th>Estatus</th>
+    <th>Finalizado</th>
   </tr>
   <?php
   $i = 1;

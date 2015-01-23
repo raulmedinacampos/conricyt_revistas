@@ -20,13 +20,18 @@ class Reporte extends CI_Controller {
 			$datos->tipo_solicitud = $revista->tipo_solicitud;
 			$datos->nombre = $revista->nombre;
 			$datos->estatus = $revista->estatus_solicitud;
+			$datos->comite_editorial = "N/A";
+			$datos->arbitraje = "N/A";
+			$datos->indices = "N/A";
+			$datos->distribucion = "N/A";
+			$datos->manuscritos = "N/A";
 			
 			$rDatos = true;
 			$rEjemplares = true;
 			$rInstitucion = true;
 			$rEditor = true;
 			
-			if(!$revista->formato || !$revista->acceso || !$revista->inicio_publicacion || !$revista->periodicidad || !$revista->area_conocimiento || !$revista->disciplina || !$revista->subdisciplina || !$revista->articulos_anio || !$revista->porcentaje_rechazados || !$revista->tiempo_recep_aprob || !$revista->factor_impacto || !$revista->issn_impreso) {
+			if(!$revista->formato || !$revista->inicio_publicacion || !$revista->periodicidad || !$revista->area_conocimiento || !$revista->disciplina || !$revista->subdisciplina || !$revista->articulos_anio || !$revista->porcentaje_rechazados || !$revista->tiempo_recep_aprob || !$revista->factor_impacto || !$revista->issn_impreso) {
 				$rDatos = false;
 			}
 			
@@ -64,69 +69,72 @@ class Reporte extends CI_Controller {
 				$datos->carta_postulacion = '<span class="glyphicon glyphicon-remove text-danger"></span>';
 			}
 			
-			if(!$revista->ruta_comite_editorial && !$revista->ruta_actas_acuerdos && !$revista->url_func_resp_norm) {
-				$datos->comite_editorial = '<span class="glyphicon glyphicon-remove text-danger"></span>';
-			}
-			
-			if(!$revista->ruta_comite_editorial || !$revista->ruta_actas_acuerdos || !$revista->url_func_resp_norm) {
-				$datos->comite_editorial = '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
-			}
-			
-			if($revista->ruta_comite_editorial && $revista->ruta_actas_acuerdos && $revista->url_func_resp_norm) {
-				$datos->comite_editorial = '<span class="glyphicon glyphicon-ok text-success"></span>';
-			}
-			
-			if(!$revista->ruta_cartera_arbitros && !$revista->ruta_bitacora_arbitraje) {
-				$datos->arbitraje = '<span class="glyphicon glyphicon-remove text-danger"></span>';
-			}
-			
-			if(!$revista->ruta_cartera_arbitros || !$revista->ruta_bitacora_arbitraje) {
-				$datos->arbitraje = '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
-			}
-			
-			if($revista->ruta_cartera_arbitros && $revista->ruta_bitacora_arbitraje) {
-				$datos->arbitraje = '<span class="glyphicon glyphicon-ok text-success"></span>';
-			}
-			
-			$indices = $this->reporte->leerIndices($revista->id_solicitud);
-			if($indices == 0) {
-				$datos->indices = '<span class="glyphicon glyphicon-remove text-danger"></span>';
-			} else if($indices == 1) {
-				$datos->indices = '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
-			} else {
-				$datos->indices = '<span class="glyphicon glyphicon-ok text-success"></span>';
-			}
-			
-			$distribuciones = $this->reporte->leerDistribuciones($revista->id_solicitud);
-			$volumenes = $this->reporte->leerVolumenes($revista->id_solicitud);
-			$volumenes = $volumenes->num_rows();
-			$articulos = $this->reporte->leerArticulos($revista->id_solicitud);
-			$articulos = $articulos->num_rows();
-			$paises = $this->reporte->leerPaises($revista->id_solicitud);
-			$paises = $paises->num_rows();
-			
-			if(!$distribuciones && $volumenes == 0 && $articulos == 0 && $paises == 0) {
-				$datos->distribucion = '<span class="glyphicon glyphicon-remove text-danger"></span>';
-			}
-			
-			if(!$distribuciones || $volumenes < 5 || $articulos < 5 || $paises < 5) {
-				$datos->distribucion = '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
-			}
-			
-			if($distribuciones && $volumenes >= 5 && $articulos >= 5 && $paises >= 5) {
-				$datos->distribucion = '<span class="glyphicon glyphicon-ok text-success"></span>';
-			}
-			
-			if(!$revista->ruta_manuscritos_rechazados && !$revista->ruta_manuscritos_aceptados && !$revista->ruta_formato_dictamen) {
-				$datos->manuscritos = '<span class="glyphicon glyphicon-remove text-danger"></span>';
-			}
-			
-			if(!$revista->ruta_manuscritos_rechazados || !$revista->ruta_manuscritos_aceptados || !$revista->ruta_formato_dictamen) {
-				$datos->manuscritos = '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
-			}
-			
-			if($revista->ruta_manuscritos_rechazados && $revista->ruta_manuscritos_aceptados && $revista->ruta_formato_dictamen) {
-				$datos->manuscritos = '<span class="glyphicon glyphicon-ok text-success"></span>';
+			if($revista->tipo_solicitud != 3) {
+				if(!$revista->ruta_comite_editorial && !$revista->ruta_actas_acuerdos && !$revista->url_func_resp_norm) {
+					$datos->comite_editorial = '<span class="glyphicon glyphicon-remove text-danger"></span>';
+				}
+				
+				if(!$revista->ruta_comite_editorial || !$revista->ruta_actas_acuerdos || !$revista->url_func_resp_norm) {
+					$datos->comite_editorial = '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
+				}
+				
+				if($revista->ruta_comite_editorial && $revista->ruta_actas_acuerdos && $revista->url_func_resp_norm) {
+					$datos->comite_editorial = '<span class="glyphicon glyphicon-ok text-success"></span>';
+				}
+				
+				if(!$revista->ruta_cartera_arbitros && !$revista->ruta_bitacora_arbitraje) {
+					$datos->arbitraje = '<span class="glyphicon glyphicon-remove text-danger"></span>';
+				}
+				
+				if(!$revista->ruta_cartera_arbitros || !$revista->ruta_bitacora_arbitraje) {
+					$datos->arbitraje = '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
+				}
+				
+				if($revista->ruta_cartera_arbitros && $revista->ruta_bitacora_arbitraje) {
+					$datos->arbitraje = '<span class="glyphicon glyphicon-ok text-success"></span>';
+				}
+				
+				$indices = $this->reporte->leerIndices($revista->id_solicitud);
+				if($indices == 0) {
+					$datos->indices = '<span class="glyphicon glyphicon-remove text-danger"></span>';
+				} else if($indices == 1) {
+					$datos->indices = '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
+				} else {
+					$datos->indices = '<span class="glyphicon glyphicon-ok text-success"></span>';
+				}
+				
+				$distribuciones = $this->reporte->leerDistribuciones($revista->id_solicitud);
+				$volumenes = $this->reporte->leerVolumenes($revista->id_solicitud);
+				$volumenes = $volumenes->num_rows();
+				$articulos = $this->reporte->leerArticulos($revista->id_solicitud);
+				$articulos = $articulos->num_rows();
+				$paises = $this->reporte->leerPaises($revista->id_solicitud);
+				$paises = $paises->num_rows();
+				$manuscritos = $this->reporte->leerManuscritos($revista->id_solicitud);
+				
+				if(!$distribuciones && $volumenes == 0 && $articulos == 0 && $paises == 0) {
+					$datos->distribucion = '<span class="glyphicon glyphicon-remove text-danger"></span>';
+				}
+				
+				if(!$distribuciones || $volumenes < 3 || $articulos < 3 || $paises < 3) {
+					$datos->distribucion = '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
+				}
+				
+				if($distribuciones && $volumenes >= 3 && $articulos >= 3 && $paises >= 3) {
+					$datos->distribucion = '<span class="glyphicon glyphicon-ok text-success"></span>';
+				}
+				
+				if(!$revista->ruta_manuscritos_rechazados && !$revista->ruta_manuscritos_aceptados && !$revista->ruta_formato_dictamen) {
+					$datos->manuscritos = '<span class="glyphicon glyphicon-remove text-danger"></span>';
+				}
+				
+				if(!$revista->ruta_manuscritos_rechazados || !$revista->ruta_manuscritos_aceptados || !$revista->ruta_formato_dictamen) {
+					$datos->manuscritos = '<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>';
+				}
+				
+				if($revista->ruta_manuscritos_rechazados && $revista->ruta_manuscritos_aceptados && $revista->ruta_formato_dictamen) {
+					$datos->manuscritos = '<span class="glyphicon glyphicon-ok text-success"></span>';
+				}
 			}
 			
 			$anexos = $this->reporte->leerAnexos($revista->id_solicitud);
@@ -172,18 +180,26 @@ class Reporte extends CI_Controller {
 		
 		$data['ejemplares'] = $this->reporte->leerEjemplaresElectronicos($datos->id_revista);
 		
+		$indices_arr = array();
+		
 		$indices = $this->reporte->leerIndicesSolicitud($datos->id_solicitud);
 		if($indices) {
 			$indices = $indices->result();
-			foreach($indices as &$val) {
+			
+			foreach($indices as $val) {
+				$indice_aux = new stdClass();
+				$indice_aux->nombre = $val->nombre;
+				$indice_aux->antiguedad = $val->antiguedad;
+				$indice_aux->tipo = $val->tipo;
 				if($val->tipo == 'i') {
-					$val->tipo = 'Índice nacional o internacional';
+					$indice_aux->tipo = 'Índice nacional o internacional';
 				} else {
-					$val->tipo = 'Servicio de abstract';
+					$indice_aux->tipo = 'Servicio de abstract';
 				}
+				$indices_arr[] = $indice_aux;
 			}
 		}
-		$data['indices'] = $indices;
+		$data['indices'] = $indices_arr;
 		
 		$data['distribuciones'] = $this->reporte->leerDistribuciones($datos->id_solicitud);
 		$data['volumenes'] = $this->reporte->leerVolumenes($datos->id_solicitud);
@@ -193,7 +209,7 @@ class Reporte extends CI_Controller {
 		$mr = array();
 		$ma = array();
 		
-		$manuscritos = $this->reporte->leerManuscritos($datos->id_solicitud);
+		$manuscritos = $this->reporte->leerManuscritosSolicitud($datos->id_solicitud);
 		if($manuscritos) {
 			$manuscritos = $manuscritos->result();
 			

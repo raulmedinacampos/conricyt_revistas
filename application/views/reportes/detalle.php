@@ -13,7 +13,16 @@ table td {
 .panel:first-of-type table:nth-of-type(2) td {
     width: auto;
 }
+.glyphicon {
+	margin-right: 4px;
+	font-size: 10px;
+	color: #656565;
+}
+.obligatorio, .obligatorio span {
+	color: #FF0000;
+}
 </style>
+
 <h4><?php echo $revista->nombre; ?></h4>
 <h5><strong><?php echo $revista->institucion; ?></strong></h5>
 <h5><?php echo trim($revista->enombre." ".$revista->ap_paterno." ".$revista->ap_materno); ?></h5>
@@ -25,32 +34,32 @@ table td {
   	<h5><strong>Datos generales</strong></h5>
     <table class="table table-condensed table-striped">
       <tr>
-        <td>Tipo de solicitud: <strong><?php echo (isset($inf_revista->tipo_solicitud)) ? $inf_revista->tipo_solicitud : ""; ?></strong></td>
-        <td>Formato de la revista: <strong><?php echo (isset($inf_revista->formato)) ? $inf_revista->formato : ""; ?></strong></td>
+        <td class="<?php echo (!$inf_revista->tipo_solicitud) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Tipo de solicitud: <strong><?php echo (isset($inf_revista->tipo_solicitud)) ? $inf_revista->tipo_solicitud : ""; ?></strong></td>
+        <td class="<?php echo (!$inf_revista->formato) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Formato de la revista: <strong><?php echo (isset($inf_revista->formato)) ? $inf_revista->formato : ""; ?></strong></td>
       </tr>
       <tr>
-        <td>Nombre de la revisa: <strong><?php echo $revista->nombre; ?></strong></td>
-        <td>Año de inicio de la publicación: <strong><?php echo $revista->inicio_publicacion; ?></strong></td>
+        <td class="<?php echo (!$revista->nombre) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Nombre de la revisa: <strong><?php echo $revista->nombre; ?></strong></td>
+        <td class="<?php echo (!$revista->inicio_publicacion) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Año de inicio de la publicación: <strong><?php echo $revista->inicio_publicacion; ?></strong></td>
       </tr>
       <tr>
-        <td>Periodicidad: <strong><?php echo $revista->periodicidad; ?></strong></td>
-        <td>Área: <strong><?php echo (isset($inf_revista->area_conocimiento)) ? $inf_revista->area_conocimiento : ""; ?></strong></td>
+        <td class="<?php echo (!$revista->periodicidad) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Periodicidad: <strong><?php echo $revista->periodicidad; ?></strong></td>
+        <td class="<?php echo (!$inf_revista->area_conocimiento) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Área: <strong><?php echo (isset($inf_revista->area_conocimiento)) ? $inf_revista->area_conocimiento : ""; ?></strong></td>
       </tr>
       <tr>
-        <td>Disciplina: <strong><?php echo $revista->disciplina; ?></strong></td>
-        <td>Subdisciplina: <strong><?php echo $revista->subdisciplina; ?></strong></td>
+        <td class="<?php echo (!$revista->disciplina) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Disciplina: <strong><?php echo $revista->disciplina; ?></strong></td>
+        <td class="<?php echo (!$revista->subdisciplina) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Subdisciplina: <strong><?php echo $revista->subdisciplina; ?></strong></td>
       </tr>
       <tr>
         <td>Otra subdisciplina o tema: <strong><?php echo $revista->otro_tema; ?></strong></td>
-        <td>Número promedio de artículos publicados por año: <strong><?php echo $revista->articulos_anio; ?></strong></td>
+        <td class="<?php echo (!$revista->articulos_anio) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Número promedio de artículos publicados por año: <strong><?php echo $revista->articulos_anio; ?></strong></td>
       </tr>
       <tr>
-        <td>Porcentaje promedio de artículos rechazados por año: <strong><?php echo $revista->porcentaje_rechazados; ?></strong></td>
-        <td>Tiempo promedio entre recepción y aprobación de un artículo: <strong><?php echo $revista->tiempo_recep_aprob; ?></strong></td>
+        <td class="<?php echo (!$revista->porcentaje_rechazados) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Porcentaje promedio de artículos rechazados por año: <strong><?php echo $revista->porcentaje_rechazados; ?></strong></td>
+        <td class="<?php echo (!$revista->tiempo_recep_aprob) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Tiempo promedio entre recepción y aprobación de un artículo: <strong><?php echo $revista->tiempo_recep_aprob; ?></strong></td>
       </tr>
       <tr>
-        <td>Factor de impacto: <strong><?php echo $revista->factor_impacto; ?></strong></td>
-        <td>ISSN impreso: <strong><?php echo $revista->issn_impreso; ?></strong></td>
+        <td class="<?php echo (!$revista->factor_impacto) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Factor de impacto: <strong><?php echo $revista->factor_impacto; ?></strong></td>
+        <td class="<?php echo (!$revista->issn_impreso) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>ISSN impreso: <strong><?php echo $revista->issn_impreso; ?></strong></td>
       </tr>
       <tr>
         <td>ISSN electrónico: <strong><?php echo $revista->issn_electronico; ?></strong></td>
@@ -58,7 +67,10 @@ table td {
       </tr>
     </table>
     
-    <h5><strong>Ejemplares electrónicos</strong></h5>
+    <?php
+    if($revista->tipo_solicitud != 3) {
+    ?>
+    <h5 class="<?php echo (!$ejemplares) ? "obligatorio" : ""; ?>"><strong><span class="glyphicon glyphicon-asterisk"></span>Ejemplares electrónicos</strong></h5>
     <table class="table table-condensed table-striped">
       <tr>
         <th>Número</th>
@@ -85,27 +97,30 @@ table td {
   }
   ?>
     </table>
+    <?php
+    }
+    ?>
     
   	<h5><strong>Datos de la institución</strong></h5>
     <table class="table table-condensed table-striped">
       <tr>
-        <td>Institución: <strong><?php echo $institucion->institucion; ?></strong></td>
-        <td>Calle y número: <strong><?php echo $institucion->calle_numero; ?></strong></td>
+        <td class="<?php echo (!$institucion->institucion) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Institución: <strong><?php echo $institucion->institucion; ?></strong></td>
+        <td class="<?php echo (!$institucion->calle_numero) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Calle y número: <strong><?php echo $institucion->calle_numero; ?></strong></td>
       </tr>
       <tr>
         <td>Número interior: <strong><?php echo $institucion->numero_interior; ?></strong></td>
-        <td>Colonia: <strong><?php echo $institucion->colonia; ?></strong></td>
+        <td class="<?php echo (!$institucion->colonia) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Colonia: <strong><?php echo $institucion->colonia; ?></strong></td>
       </tr>
       <tr>
-        <td>País: <strong><?php echo $institucion->pais; ?></strong></td>
-        <td>Estado: <strong><?php echo $institucion->entidad; ?></strong></td>
+        <td class="<?php echo (!$institucion->pais) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>País: <strong><?php echo $institucion->pais; ?></strong></td>
+        <td class="<?php echo (!$institucion->entidad) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Estado: <strong><?php echo $institucion->entidad; ?></strong></td>
       </tr>
       <tr>
         <td>Delegación o municipio: <strong><?php echo $institucion->municipio; ?></strong></td>
-        <td>Ciudad: <strong><?php echo $institucion->ciudad; ?></strong></td>
+        <td class="<?php echo (!$institucion->ciudad) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Ciudad: <strong><?php echo $institucion->ciudad; ?></strong></td>
       </tr>
       <tr>
-        <td>Código postal: <strong><?php echo $institucion->codigo_postal; ?></strong></td>
+        <td class="<?php echo (!$institucion->codigo_postal) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Código postal: <strong><?php echo $institucion->codigo_postal; ?></strong></td>
         <td>&nbsp;</td>
       </tr>
     </table>
@@ -113,25 +128,25 @@ table td {
   	<h5><strong>Datos del editor</strong></h5>
     <table class="table table-condensed table-striped">
       <tr>
-        <td>Grado: <strong><?php echo $editor->grado_academico; ?></strong></td>
-        <td>Cargo: <strong><?php echo $editor->cargo; ?></strong></td>
+        <td class="<?php echo (!$editor->grado_academico) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Grado: <strong><?php echo $editor->grado_academico; ?></strong></td>
+        <td class="<?php echo (!$editor->cargo) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Cargo: <strong><?php echo $editor->cargo; ?></strong></td>
       </tr>
       <tr>
-        <td>Nombre: <strong><?php echo $editor->nombre; ?></strong></td>
-        <td>Apellido paterno: <strong><?php echo $editor->ap_paterno; ?></strong></td>
+        <td class="<?php echo (!$editor->nombre) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Nombre: <strong><?php echo $editor->nombre; ?></strong></td>
+        <td class="<?php echo (!$editor->ap_paterno) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Apellido paterno: <strong><?php echo $editor->ap_paterno; ?></strong></td>
       </tr>
       <tr>
-        <td>Apellido materno: <strong><?php echo $editor->ap_materno; ?></strong></td>
-        <td>Correo: <strong><?php echo $editor->correo; ?></strong></td>
+        <td class="<?php echo (!$editor->ap_materno) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Apellido materno: <strong><?php echo $editor->ap_materno; ?></strong></td>
+        <td class="<?php echo (!$editor->correo) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Correo: <strong><?php echo $editor->correo; ?></strong></td>
       </tr>
       <tr>
-        <td>Telefono: <strong><?php echo $editor->telefono; ?></strong></td>
+        <td class="<?php echo (!$editor->telefono) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Telefono: <strong><?php echo $editor->telefono; ?></strong></td>
         <td>&nbsp;</td>
       </tr>
     </table>
     
-  	<p>
-    	Carta de postulación: <strong>
+  	<p class="<?php echo (!$revista->ruta_carta_postulacion) ? "obligatorio" : ""; ?>">
+    	<span class="glyphicon glyphicon-asterisk"></span>Carta de postulación: <strong>
         <?php
 			if($revista->ruta_carta_postulacion) {
 				echo 'Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.$revista->ruta_carta_postulacion).'">'.$revista->ruta_carta_postulacion."</a>";
@@ -141,8 +156,11 @@ table td {
 		?>
       </strong>
     </p>
-  	<p>
-    	Carta de renovación automática: <strong>
+    <?php
+    if($revista->tipo_solicitud == 3) {
+    ?>
+  	<p class="<?php echo (!$revista->ruta_carta_exencion) ? "obligatorio" : ""; ?>">
+    	<span class="glyphicon glyphicon-asterisk"></span>Carta de renovación automática: <strong>
         <?php
 			if($revista->ruta_carta_exencion) {
 				echo 'Archivo cargado: <a href="'.base_url('uploads/'.$revista->login.'/'.$revista->ruta_carta_exencion).'">'.$revista->ruta_carta_exencion."</a>";
@@ -152,8 +170,15 @@ table td {
 		?>
       </strong>
     </p>
+    <?php
+    }
+    ?>
   </div>
 </div>
+
+<?php
+if($revista->tipo_solicitud != 3) {
+?>
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Comité editorial</h3>
@@ -161,7 +186,7 @@ table td {
   <div class="panel-body">
     <table class="table table-condensed table-striped">
       <tr>
-        <td>Comité editorial</td>
+        <td class="<?php echo (!$revista->ruta_comite_editorial) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Comité editorial</td>
         <td><strong>
           <?php
     	if($revista->ruta_comite_editorial) {
@@ -173,7 +198,7 @@ table td {
           </strong></td>
       </tr>
       <tr>
-        <td>Actas y acuerdos</td>
+        <td class="<?php echo (!$revista->ruta_actas_acuerdos) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Actas y acuerdos</td>
         <td><strong>
           <?php
     	if($revista->ruta_actas_acuerdos) {
@@ -185,7 +210,7 @@ table td {
           </strong></td>
       </tr>
       <tr>
-        <td>Funciones, reponsabilidades y normatividad</td>
+        <td class="<?php echo (!$revista->url_func_resp_norm) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Funciones, reponsabilidades y normatividad</td>
         <td><strong>
           <?php
     	if($revista->url_func_resp_norm) {
@@ -206,7 +231,7 @@ table td {
   <div class="panel-body">
     <table class="table table-condensed table-striped">
       <tr>
-        <td>Cartera de árbitros</td>
+        <td class="<?php echo (!$revista->ruta_cartera_arbitros) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Cartera de árbitros</td>
         <td><strong>
           <?php
     	if($revista->ruta_cartera_arbitros) {
@@ -218,7 +243,7 @@ table td {
           </strong></td>
       </tr>
       <tr>
-        <td>Bitácora de arbitraje</td>
+        <td class="<?php echo (!$revista->ruta_bitacora_arbitraje) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Bitácora de arbitraje</td>
         <td><strong>
           <?php
     	if($revista->ruta_bitacora_arbitraje) {
@@ -237,8 +262,8 @@ table td {
     <h3 class="panel-title">Índices y resúmenes</h3>
   </div>
   <div class="panel-body">
-  	<p>
-    	Presencia en bases de datos: <strong>
+  	<p class="<?php echo (!$revista->url_presencia_bd) ? "obligatorio" : ""; ?>">
+    	<span class="glyphicon glyphicon-asterisk"></span>Presencia en bases de datos: <strong>
         <?php
 			if($revista->url_presencia_bd) {
 				echo 'URL: <a href="'.$revista->url_presencia_bd.'" target="_blank">'.$revista->url_presencia_bd."</a>";
@@ -248,6 +273,7 @@ table td {
 		?>
       </strong>
     </p>
+    <h5 class="<?php echo (!$indices) ? "obligatorio" : ""; ?>"><strong><span class="glyphicon glyphicon-asterisk"></span>Índices y abstracts</strong></h5>
     <table class="table table-condensed table-striped">
       <tr>
         <th>Nombre del índice</th>
@@ -281,7 +307,7 @@ table td {
     <h3 class="panel-title">Distribución electrónica</h3>
   </div>
   <div class="panel-body">
-  	<h5><strong>Distribución electrónica</strong></h5>
+  	<h5 class="<?php echo (!$distribuciones) ? "obligatorio" : ""; ?>"><strong><span class="glyphicon glyphicon-asterisk"></span>Distribución electrónica</strong></h5>
     <table class="table table-condensed table-striped">
       <tr>
         <th>Año</th>
@@ -313,7 +339,7 @@ table td {
   ?>
     </table>
     
-  	<h5><strong>Volúmenes más consultados</strong></h5>
+  	<h5 class="<?php echo ($volumenes->num_rows() == 0) ? "obligatorio" : ""; ?>"><strong><span class="glyphicon glyphicon-asterisk"></span>Volúmenes más consultados</strong></h5>
     <table class="table table-condensed table-striped">
       <tr>
         <th>Año</th>
@@ -322,7 +348,7 @@ table td {
         <th>Texto completo</th>
       </tr>
       <?php
-  if($volumenes) {
+  if($volumenes->num_rows() > 0) {
 	foreach($volumenes->result() as $volumen) {
 	?>
       <tr>
@@ -343,7 +369,7 @@ table td {
   ?>
     </table>
     
-  	<h5><strong>Artículos más descargados</strong></h5>
+  	<h5 class="<?php echo ($articulos->num_rows() == 0) ? "obligatorio" : ""; ?>"><strong><span class="glyphicon glyphicon-asterisk"></span>Artículos más descargados</strong></h5>
     <table class="table table-condensed table-striped">
       <tr>
         <th>Año</th>
@@ -352,7 +378,7 @@ table td {
         <th>Autor(es)</th>
       </tr>
       <?php
-  if($articulos) {
+  if($articulos->num_rows() > 0) {
 	foreach($articulos->result() as $articulo) {
 	?>
       <tr>
@@ -373,7 +399,7 @@ table td {
   ?>
     </table>
     
-  	<h5><strong>Países que más consultan los artículos</strong></h5>
+  	<h5 class="<?php echo ($paises->num_rows() == 0) ? "obligatorio" : ""; ?>"><strong><span class="glyphicon glyphicon-asterisk"></span>Países que más consultan los artículos</strong></h5>
     <table class="table table-condensed table-striped">
       <tr>
         <th>Año</th>
@@ -382,7 +408,7 @@ table td {
         <th>Texto completo</th>
       </tr>
       <?php
-  if($paises) {
+  if($paises->num_rows() > 0) {
 	foreach($paises->result() as $pais) {
 	?>
       <tr>
@@ -411,7 +437,7 @@ table td {
   <div class="panel-body">
     <table class="table table-condensed table-striped">
       <tr>
-        <td>Formato de dictamen o formato libre</td>
+        <td class="<?php echo (!$revista->ruta_formato_dictamen) ? "obligatorio" : ""; ?>"><span class="glyphicon glyphicon-asterisk"></span>Formato de dictamen o formato libre</td>
         <td><strong>
           <?php
     	if($revista->ruta_formato_dictamen) {
@@ -424,7 +450,7 @@ table td {
       </tr>
     </table>
     
-    <h5><strong>Manuscritos rechazados o condicionados</strong></h5>
+    <h5 class="<?php echo (!$revista->ruta_manuscritos_rechazados) ? "obligatorio" : ""; ?>"><strong><span class="glyphicon glyphicon-asterisk"></span>Manuscritos rechazados o condicionados</strong></h5>
     <table class="table table-condensed table-striped">
       <?php
   if($revista->ruta_manuscritos_rechazados || $manuscritos_rechazados) {
@@ -448,7 +474,7 @@ table td {
   ?>
     </table>
     
-    <h5><strong>Manuscritos aceptados</strong></h5>
+    <h5 class="<?php echo (!$revista->ruta_manuscritos_aceptados) ? "obligatorio" : ""; ?>"><strong><span class="glyphicon glyphicon-asterisk"></span>Manuscritos aceptados</strong></h5>
     <table class="table table-condensed table-striped">
       <?php
   if($revista->ruta_manuscritos_aceptados || $manuscritos_aceptados) {
@@ -465,7 +491,7 @@ table td {
   } else {
   ?>
       <tr>
-        <td colspan="2"><strong>No se han cargadp manuscritos aceptados</strong></td>
+        <td colspan="2"><strong>No se han cargado manuscritos aceptados</strong></td>
       </tr>
       <?php
   }
@@ -473,6 +499,10 @@ table td {
     </table>
   </div>
 </div>
+<?php
+}
+?>
+
 <div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Anexos de revistas</h3>
