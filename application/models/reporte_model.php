@@ -11,9 +11,32 @@ class Reporte_model extends CI_Model {
 	}
 	
 	public function obtenerTotalRevistas() {
-		$this->db->select('id_revista');
-		$this->db->from('revista');
-		$this->db->where('estatus', 1);
+		$this->db->select('r.id_revista');
+		$this->db->from('revista r');
+		$this->db->join('solicitud s', 'r.id_revista = s.revista');
+		$this->db->where('r.estatus', 1);
+		$query = $this->db->get();
+		
+		return $query->num_rows();
+	}
+	
+	public function obtenerTotalFinalizados() {
+		$this->db->select('s.id_solicitud');
+		$this->db->from('revista r');
+		$this->db->join('solicitud s', 'r.id_revista = s.revista');
+		$this->db->where('s.estatus', 5);
+		$this->db->where('r.estatus', 1);
+		$query = $this->db->get();
+		
+		return $query->num_rows();
+	}
+	
+	public function obtenerTotalPendientes() {
+		$this->db->select('s.id_solicitud');
+		$this->db->from('revista r');
+		$this->db->join('solicitud s', 'r.id_revista = s.revista');
+		$this->db->where('s.estatus', 1);
+		$this->db->where('r.estatus', 1);
 		$query = $this->db->get();
 		
 		return $query->num_rows();

@@ -8,6 +8,8 @@ class Reporte extends CI_Controller {
 	public function index() {
 		$data['totalUsuarios'] = $this->reporte->obtenerTotalUsuarios();
 		$data['totalRevistas'] = $this->reporte->obtenerTotalRevistas();
+		$data['totalFinalizados'] = $this->reporte->obtenerTotalFinalizados();
+		$data['totalPendientes'] = $this->reporte->obtenerTotalPendientes();
 		$data['datos'] = array();
 		
 		$revistas = $this->reporte->leerRevistas();

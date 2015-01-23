@@ -1,5 +1,7 @@
-<h5>Total de usuarios: <?php echo $totalUsuarios; ?></h5>
-<h5>Total de revistas registradas: <?php echo $totalRevistas; ?></h5>
+<h5><strong>Total de usuarios: <?php echo $totalUsuarios; ?></strong></h5>
+<h5><strong>Total de revistas registradas: <?php echo $totalRevistas; ?></strong></h5>
+<h5><strong>Total de solicitudes finalizadas: <?php echo $totalFinalizados; ?></strong></h5>
+<h5><strong>Total de solicitudes pendientes: <?php echo $totalPendientes; ?></strong></h5>
 <table class="table table-condensed table-striped">
   <tr>
     <th>#</th>
