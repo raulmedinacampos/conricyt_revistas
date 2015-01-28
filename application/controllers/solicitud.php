@@ -263,6 +263,8 @@ class Solicitud extends CI_Controller {
 	}
 	
 	public function guardar() {
+		if(date('Y-m-d') <= "2015-01-26") {
+		
 		$config['upload_path'] = './uploads/';
 		$config['max_size']	= '10240';
 		
@@ -704,6 +706,9 @@ class Solicitud extends CI_Controller {
 		$this->solicitud->actualizarRevista($id_revista, $revista);
 		
 		$this->solicitud->actualizarEditor($id_editor, $editor);
+		} else {
+			redirect(base_url('solicitud/convocatoriaFinalizada'));
+		}
 	}
 	
 	public function guardarCambios() {

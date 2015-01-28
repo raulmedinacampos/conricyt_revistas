@@ -15,6 +15,7 @@ class Reporte_model extends CI_Model {
 		$this->db->from('revista r');
 		$this->db->join('solicitud s', 'r.id_revista = s.revista');
 		$this->db->where('r.estatus', 1);
+		$this->db->where('s.estatus >', 0);
 		$query = $this->db->get();
 		
 		return $query->num_rows();
@@ -42,12 +43,57 @@ class Reporte_model extends CI_Model {
 		return $query->num_rows();
 	}
 	
-	public function leerRevistas() {
+	public function leerRevistas($estatus = false) {
 		$this->db->select("*, s.estatus AS estatus_solicitud");
 		$this->db->from('revista r');
 		$this->db->join('solicitud s', 'r.id_revista = s.revista');
 		$this->db->where('r.estatus', 1);
+		
+		if($estatus === false) {
+			$this->db->where('s.estatus >', 0);
+		} else {
+			$this->db->where('s.estatus', $estatus);
+		}
+		
 		$this->db->order_by('r.nombre');
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			return $query;
+		}
+	}
+	
+	public function leerTipoSolicitud() {
+		$this->db->select('id_tipo_solicitud, tipo_solicitud');
+		$this->db->from('cat_tipo_solicitud');
+		$this->db->where('estatus', 1);
+		$this->db->order_by('tipo_solicitud', 'DESC');
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			return $query;
+		}
+	}
+	
+	public function leerRevistasInstitucion() {
+		$this->db->select('r.nombre, r.institucion');
+		$this->db->from('revista r');
+		$this->db->join('solicitud s', 'r.id_revista = s.revista');
+		$this->db->where('r.estatus', 1);
+		$this->db->where('s.estatus', 5);
+		$this->db->order_by('r.institucion, r.nombre');
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			return $query;
+		}
+	}
+	
+	public function leerAreas() {
+		$this->db->select('id_area_conocimiento, area_conocimiento');
+		$this->db->from('cat_area_conocimiento');
+		$this->db->where('estatus', 1);
+		$this->db->order_by('area_conocimiento');
 		$query = $this->db->get();
 		
 		if($query->num_rows() > 0) {

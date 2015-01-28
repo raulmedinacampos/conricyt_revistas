@@ -238,5 +238,31 @@ class Reporte extends CI_Controller {
 		$this->load->view('reportes/detalle', $data);
 		$this->load->view('footer');
 	}
+	
+	public function por_tipo_solicitud() {
+		$data['tipos_solicitudes'] = $this->reporte->leerTipoSolicitud();
+		$data['revistas'] = $this->reporte->leerRevistas(5);
+		
+		$this->load->view('header');
+		$this->load->view('reportes/tipo_solicitud', $data);
+		$this->load->view('footer');
+	}
+	
+	public function por_institucion() {
+		$data['revistas'] = $this->reporte->leerRevistasInstitucion(5);
+	
+		$this->load->view('header');
+		$this->load->view('reportes/instituciones', $data);
+		$this->load->view('footer');
+	}
+	
+	public function por_area() {
+		$data['areas'] = $this->reporte->leerAreas();
+		$data['revistas'] = $this->reporte->leerRevistas(5);
+	
+		$this->load->view('header');
+		$this->load->view('reportes/areas', $data);
+		$this->load->view('footer');
+	}
 }
 ?>
