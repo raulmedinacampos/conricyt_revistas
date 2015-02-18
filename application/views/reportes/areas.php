@@ -4,7 +4,7 @@ foreach($areas->result() as $area) {
 ?>
 <div class="panel panel-primary">
   <div class="panel-heading">
-    <h3 class="panel-title"><?php echo $area->area_conocimiento; ?></h3>
+    <h3 class="panel-title"><?php if($area->num_area) {echo $area->num_area.". "; } echo $area->area_conocimiento; ?></h3>
   </div>
   <table class="table table-condensed table-striped">
     <tbody>

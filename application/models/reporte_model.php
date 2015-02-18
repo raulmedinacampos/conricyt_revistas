@@ -90,11 +90,11 @@ class Reporte_model extends CI_Model {
 	}
 	
 	public function leerAreas() {
-		$this->db->select('id_area_conocimiento, area_conocimiento');
-		$this->db->from('cat_area_conocimiento');
-		$this->db->where('estatus', 1);
-		$this->db->order_by('area_conocimiento');
-		$query = $this->db->get();
+		$sql = "SELECT id_area_conocimiento, num_area, area_conocimiento 
+				FROM cat_area_conocimiento 
+				WHERE estatus = 1 
+				ORDER BY FIELD (num_area, NULL)";
+		$query = $this->db->query($sql);
 		
 		if($query->num_rows() > 0) {
 			return $query;

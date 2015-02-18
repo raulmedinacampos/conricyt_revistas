@@ -1,6 +1,11 @@
 eclipse.preferences.version=1
+encoding//application/views/evaluacion/formulario.php=UTF-8
+encoding//application/views/evaluacion/inicio_representante.php=UTF-8
+encoding//application/views/evaluacion/revistas_asignadas.php=UTF-8
+encoding//application/views/header.php=UTF-8
 encoding//application/views/reportes/areas.php=UTF-8
 encoding//application/views/reportes/detalle.php=UTF-8
 encoding//application/views/reportes/instituciones.php=UTF-8
 encoding//application/views/reportes/principal.php=UTF-8
 encoding//application/views/reportes/tipo_solicitud.php=UTF-8
+encoding//application/views/solicitud/anexos.php=UTF-8

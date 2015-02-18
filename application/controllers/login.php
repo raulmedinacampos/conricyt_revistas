@@ -38,6 +38,9 @@ class Login extends CI_Controller {
 				case 3:
 					redirect(base_url('solicitud'));
 					break;
+				case 4:
+					redirect(base_url('representante-comite'));
+					break;
 				default:
 					break;
 			}

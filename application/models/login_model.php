@@ -12,5 +12,16 @@ class Login_model extends CI_Model {
 			return $query->row();
 		}
 	}
+	
+	public function consultarUsuarioPorID($id) {
+		$this->db->select('');
+		$this->db->from('usuario u');
+		$this->db->where('u.id_usuario', $id);
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			return $query->row();
+		}
+	}
 }
 ?>
