@@ -18,7 +18,7 @@ $(function() {
 ?>
 </script>
 
-<h3>Formato de evaluación</h3>
+<h3>Formato de evaluación<a href="<?php echo base_url('evaluador'); ?>"><span class="btn btn-default btn-sm" style="float:right; margin-top:-5px;"><span class="glyphicon glyphicon-arrow-left"></span> &nbsp;Regresar</span></a></h3>
 <?php
 $attr = array(
 		'id'	=>	'formDatos',
@@ -150,7 +150,14 @@ echo form_open(base_url(), $attr);
 	echo form_input($attr);
 	echo '</div>';
 	echo '</div>';
-	?>
+	
+	echo '<div class="form-group">';
+	echo form_label('Información:', '', array('class' => 'col-sm-4 control-label'));
+	
+	echo '<div class="col-sm-5">';
+	echo '<a href="'.base_url('revista/detalle/'.$datos->id_revista).'" target="_blank"><span class="btn btn-warning col-sm-12">Datos y documentos de la revista</span></a>';
+	echo '</div>';
+	echo '</div>';	?>
 	</div>
 </div>
 <?php
@@ -195,6 +202,9 @@ foreach($secciones->result() as $seccion) {
 								'name'	=>	'rdb_'.$pregunta->id_pregunta,
 								'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 1
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Sí", '', array('class' => 'radio-inline'));
 							
 							$attr = array(
@@ -202,13 +212,17 @@ foreach($secciones->result() as $seccion) {
 								'name'	=>	'rdb_'.$pregunta->id_pregunta,
 								'value'	=>	0
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." No", '', array('class' => 'radio-inline'));
 							echo '<div class="form-group">';
 							$attr = array(
 								'id'	=>	'txt_'.$pregunta->id_pregunta,
 								'name'	=>	'txt_'.$pregunta->id_pregunta,
 								'class'	=>	'form-control',
-								'rows'	=>	'3'
+								'rows'	=>	'3',
+								'value'	=>	(isset($pregunta->justificacion)) ? $pregunta->justificacion : ""
 							);
 							echo form_label("Por favor justifique su respuesta:");
 							echo form_textarea($attr);
@@ -365,6 +379,9 @@ foreach($secciones->result() as $seccion) {
 							'name'	=>	'rdb_'.$pregunta->id_pregunta,
 							'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 1
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Muy claramente", '', array('class' => 'radio-inline'));
 							
 							$attr = array(
@@ -372,6 +389,9 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 0.67
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Claramente", '', array('class' => 'radio-inline'));
 							
 							$attr = array(
@@ -379,6 +399,9 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 0.33
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." No es claro", '', array('class' => 'radio-inline'));
 								
 							$attr = array(
@@ -386,13 +409,17 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	0
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Definitivamente no", '', array('class' => 'radio-inline'));
 							echo '<div class="form-group">';
 							$attr = array(
 									'id'	=>	'txt_'.$pregunta->id_pregunta,
 									'name'	=>	'txt_'.$pregunta->id_pregunta,
 									'class'	=>	'form-control',
-									'rows'	=>	'3'
+									'rows'	=>	'3',
+									'value'	=>	(isset($pregunta->justificacion)) ? $pregunta->justificacion : ""
 							);
 							echo form_label("Por favor justifique su respuesta:");
 							echo form_textarea($attr);
@@ -616,6 +643,34 @@ foreach($secciones->result() as $seccion) {
 	echo '</div>';  // Contenedor principal
 }
 
+echo '</div>';
+
+echo '<div class="form-group">';
+echo form_label('Calificación final:', '', array('class' => 'col-sm-2 control-label'));
+
+$attr = array(
+		'id'	=>	'calificacion_final',
+		'name'	=>	'calificacion_final',
+		'value'	=>	(isset($datos->calificacion)) ? $datos->calificacion : "",
+		'readonly'=>'readonly',
+		'class'	=>	'form-control'
+);
+echo '<div class="col-sm-1">';
+echo form_input($attr);
+echo '</div>';
+
+echo form_label('Comentarios sobre la revista en su conjunto:', '', array('class' => 'col-sm-2 control-label'));
+
+$attr = array(
+		'id'	=>	'comentarios',
+		'name'	=>	'comentarios',
+		'rows'	=>	'3',
+		'value'	=>	(isset($datos->comentarios)) ? $datos->comentarios : "",
+		'class'	=>	'form-control'
+);
+echo '<div class="col-sm-7">';
+echo form_textarea($attr);
+echo '</div>';
 echo '</div>';
 
 if($datos->estatus != 5) {

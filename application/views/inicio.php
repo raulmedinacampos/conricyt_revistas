@@ -14,10 +14,9 @@ $(function() {
   <div class="panel panel-primary">
     <div class="panel-heading"><strong>Indicaciones</strong></div>
     <div class="panel-body">
-      <ol>
-        <li>Para capturar una solicitud debe registrarse el director o editor de la revista en <a href="<?php echo base_url('registro'); ?>">esta liga</a>.</li>
-        <li>Una vez registrado, ingresa tu usuario y contraseña en los campos correspondientes.</li>
-      </ol>
+      <ul>
+        <li>Ingresa tu usuario y contraseña en los campos correspondientes.</li>
+      </ul>
     </div>
   </div>
 </div>
@@ -75,11 +74,6 @@ $(function() {
 		);
 		echo form_button($attr);
 		?>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-md-12 control">
-          <div style="border-top: 1px solid#888; padding-top:15px; font-weight:bold;"> <a href="<?php echo base_url('registro'); ?>"> Registrarse por primera vez </a> </div>
         </div>
       </div>
 <?php

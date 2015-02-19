@@ -17,7 +17,9 @@ class Evaluador extends CI_Controller {
 		$data['revistas'] = $this->evaluador->consultarRevistasPorEvaluador($evaluador);
 		$data['usuario'] = $this->usuario->consultarUsuarioPorID($evaluador);
 		
-		$this->load->view('header');
+		$header['area'] = $this->evaluador->consultarAreaPorUsuario($evaluador);
+		
+		$this->load->view('header', $header);
 		$this->load->view('evaluacion/revistas_asignadas', $data);
 		$this->load->view('footer');
 	}
@@ -34,6 +36,8 @@ class Evaluador extends CI_Controller {
 		}
 		
 		$id_usuario = $this->session->userdata['id_usr'];
+		
+		$header['area'] = $this->evaluador->consultarAreaPorUsuario($id_usuario);
 		
 		$data['secciones'] = $this->evaluador->leerSecciones();
 		$data['subsecciones'] = $this->evaluador->leerSubsecciones();
@@ -79,9 +83,11 @@ class Evaluador extends CI_Controller {
 		if($evaluacion) {
 			$datos->fecha_evaluacion = Fecha::ConvertirNormal($evaluacion->fecha_evaluacion);
 			$datos->estatus = $evaluacion->estatus;
+			$datos->comentarios = $evaluacion->comentarios;
 		}
 		
 		$datos->folio = $solicitud->folio;
+		$datos->id_revista = $solicitud->revista;
 		$datos->revista = $solicitud->nombre;
 		$datos->id_solicitud = $solicitud->id_solicitud;
 		$datos->editor = trim($editor->nombre." ".$editor->ap_paterno." ".$editor->ap_materno);
@@ -89,7 +95,7 @@ class Evaluador extends CI_Controller {
 
 		$data['datos'] = $datos;
 		
-		$this->load->view('header');
+		$this->load->view('header', $header);
 		$this->load->view('evaluacion/formulario', $data);
 		$this->load->view('footer');
 	}
@@ -101,6 +107,7 @@ class Evaluador extends CI_Controller {
 		$data['fecha_evaluacion'] = Fecha::ConvertirMySQL($data['fecha_evaluacion']);
 		$data['solicitud'] = $this->input->post('id_solicitud');
 		$data['usuario'] = $this->session->userdata['id_usr'];
+		$data['comentarios'] = addslashes($this->input->post('comentarios'));
 		$evaluacion = $this->evaluador->consultarDatosEvaluacionPorSolicitud($data['solicitud']);
 		if($evaluacion) {
 			$data['fecha_modificacion'] = date('Y-m-d H:i:s');
@@ -149,6 +156,7 @@ class Evaluador extends CI_Controller {
 		$evaluacion = $this->evaluador->consultarDatosEvaluacionPorSolicitud($id_solicitud);
 		if($evaluacion) {
 			$data['fecha_modificacion'] = date('Y-m-d H:i:s');
+			$data['calificacion'] =  $this->input->post('calificacion_final');
 			$this->evaluador->actualizarEvaluacion($evaluacion->id_evaluacion, $data);
 			$id_evaluacion = $evaluacion->id_evaluacion;
 		}

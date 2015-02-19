@@ -68,6 +68,7 @@ class Evaluador_model extends CI_Model {
 		$this->db->join('evaluador_revista er', 'r.id_revista = er.revista');
 		$this->db->join('evaluacion ev', 's.id_solicitud = ev.solicitud', "left");
 		$this->db->where('er.usuario', $evaluador);
+		$this->db->order_by('r.nombre');
 		$query = $this->db->get();
 		
 		if($query->num_rows() > 0) {
@@ -100,7 +101,7 @@ class Evaluador_model extends CI_Model {
 	}
 	
 	public function consultarDatosEvaluacionPorSolicitud($solicitud) {
-		$this->db->select('ev.id_evaluacion, ev.fecha_evaluacion, ev.usuario, ev.solicitud, ev.estatus');
+		$this->db->select('ev.id_evaluacion, ev.fecha_evaluacion, ev.usuario, ev.solicitud, ev.comentarios, ev.estatus');
 		$this->db->from('evaluacion ev');
 		$this->db->where('ev.solicitud', $solicitud);
 		$query = $this->db->get();
@@ -172,6 +173,19 @@ class Evaluador_model extends CI_Model {
 		
 		if($this->db->update('evaluacion', $data)) {
 			return true;
+		}
+	}
+	
+	public function consultarAreaPorUsuario($usr) {
+		$this->db->select('c.area_conocimiento');
+		$this->db->from('comision c');
+		$this->db->join('comision_usuario cu', 'c.id_comision = cu.comision');
+		$this->db->where('cu.usuario', $usr);
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			$area = $query->row();
+			return $area->area_conocimiento;
 		}
 	}
 }

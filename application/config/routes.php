@@ -39,6 +39,7 @@
 */
 
 $route['default_controller'] = "login";
+$route['revista/detalle/(:num)'] = 'reporte/detalle/$1';
 $route['404_override'] = '';
 
 
