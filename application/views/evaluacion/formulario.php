@@ -212,7 +212,7 @@ foreach($secciones->result() as $seccion) {
 								'name'	=>	'rdb_'.$pregunta->id_pregunta,
 								'value'	=>	0
 							);
-							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+							if(isset($pregunta->opcion) && $pregunta->opcion == 0) {
 								$attr['checked'] = 'checked';
 							}
 							echo form_label(form_radio($attr)." No", '', array('class' => 'radio-inline'));
@@ -250,6 +250,9 @@ foreach($secciones->result() as $seccion) {
 												'name'	=>	'rdb_'.$ph->id_pregunta,
 												'value'	=>	(isset($ph->puntos_asignados)) ? $ph->puntos_asignados : 1
 											);
+											if(isset($ph->opcion) && $ph->opcion == 1) {
+												$attr['checked'] = 'checked';
+											}
 											echo form_label(form_radio($attr)." Sí", '', array('class' => 'radio-inline'));
 											
 											$attr = array(
@@ -257,13 +260,17 @@ foreach($secciones->result() as $seccion) {
 												'name'	=>	'rdb_'.$ph->id_pregunta,
 												'value'	=>	0
 											);
+											if(isset($ph->opcion) && $ph->opcion == 0) {
+												$attr['checked'] = 'checked';
+											}
 											echo form_label(form_radio($attr)." No", '', array('class' => 'radio-inline'));
 											echo '<div class="form-group">';
 											$attr = array(
 												'id'	=>	'txt_'.$ph->id_pregunta,
 												'name'	=>	'txt_'.$ph->id_pregunta,
 												'class'	=>	'form-control',
-												'rows'	=>	'3'
+												'rows'	=>	'3',
+												'value'	=>	(isset($ph->justificacion)) ? $ph->justificacion : ""
 											);
 											echo form_label("Argumento:");
 											echo form_textarea($attr);
@@ -284,6 +291,9 @@ foreach($secciones->result() as $seccion) {
 												'name'	=>	'rdb_'.$ph->id_pregunta,
 												'value'	=>	(isset($ph->puntos_asignados)) ? $ph->puntos_asignados : 2
 											);
+											if(isset($ph->opcion) && $ph->opcion == 2) {
+												$attr['checked'] = 'checked';
+											}
 											echo form_label(form_radio($attr)." Completo", '', array('class' => 'radio-inline'));
 											
 											$attr = array(
@@ -291,6 +301,9 @@ foreach($secciones->result() as $seccion) {
 												'name'	=>	'rdb_'.$ph->id_pregunta,
 												'value'	=>	(isset($ph->puntos_asignados)) ? $ph->puntos_asignados : 1
 											);
+											if(isset($ph->opcion) && $ph->opcion == 1) {
+												$attr['checked'] = 'checked';
+											}
 											echo form_label(form_radio($attr)." Parcial", '', array('class' => 'radio-inline'));
 											
 											$attr = array(
@@ -298,6 +311,9 @@ foreach($secciones->result() as $seccion) {
 												'name'	=>	'rdb_'.$ph->id_pregunta,
 												'value'	=>	0
 											);
+											if(isset($ph->opcion) && $ph->opcion == 0) {
+												$attr['checked'] = 'checked';
+											}
 											echo form_label(form_radio($attr)." Pobre", '', array('class' => 'radio-inline'));
 											break;
 										case 6:
@@ -325,6 +341,9 @@ foreach($secciones->result() as $seccion) {
 							'name'	=>	'rdb_'.$pregunta->id_pregunta,
 							'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 1
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Sí", '', array('class' => 'radio-inline'));
 								
 							$attr = array(
@@ -332,6 +351,9 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	0
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 0) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." No", '', array('class' => 'radio-inline'));
 							break;
 						case 5:
@@ -340,6 +362,9 @@ foreach($secciones->result() as $seccion) {
 							'name'	=>	'rdb_'.$pregunta->id_pregunta,
 							'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 1
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Muy buena", '', array('class' => 'radio-inline'));
 							
 							$attr = array(
@@ -347,6 +372,9 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 0.67
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 0.67) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Buena", '', array('class' => 'radio-inline'));
 							
 							$attr = array(
@@ -354,6 +382,9 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 0.33
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 0.33) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Regular", '', array('class' => 'radio-inline'));
 								
 							$attr = array(
@@ -361,13 +392,17 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	0
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 0) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Definitivamente debe mejorar", '', array('class' => 'radio-inline'));
 							echo '<div class="form-group">';
 							$attr = array(
 									'id'	=>	'txt_'.$pregunta->id_pregunta,
 									'name'	=>	'txt_'.$pregunta->id_pregunta,
 									'class'	=>	'form-control',
-									'rows'	=>	'3'
+									'rows'	=>	'3',
+									'value'	=>	(isset($pregunta->justificacion)) ? $pregunta->justificacion : ""
 							);
 							echo form_label("Por favor justifique su respuesta:");
 							echo form_textarea($attr);
@@ -389,7 +424,7 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 0.67
 							);
-							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+							if(isset($pregunta->opcion) && $pregunta->opcion == 0.67) {
 								$attr['checked'] = 'checked';
 							}
 							echo form_label(form_radio($attr)." Claramente", '', array('class' => 'radio-inline'));
@@ -399,7 +434,7 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 0.33
 							);
-							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+							if(isset($pregunta->opcion) && $pregunta->opcion == 0.33) {
 								$attr['checked'] = 'checked';
 							}
 							echo form_label(form_radio($attr)." No es claro", '', array('class' => 'radio-inline'));
@@ -409,7 +444,7 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	0
 							);
-							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+							if(isset($pregunta->opcion) && $pregunta->opcion == 0) {
 								$attr['checked'] = 'checked';
 							}
 							echo form_label(form_radio($attr)." Definitivamente no", '', array('class' => 'radio-inline'));
@@ -431,6 +466,9 @@ foreach($secciones->result() as $seccion) {
 							'name'	=>	'rdb_'.$pregunta->id_pregunta,
 							'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 1
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 1) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Muy cuidado y de buena calidad", '', array('class' => 'radio-inline'));
 								
 							$attr = array(
@@ -438,6 +476,9 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	(isset($pregunta->puntos_asignados)) ? $pregunta->puntos_asignados : 0.5
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 0.5) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Cuidado pero faltó calidad", '', array('class' => 'radio-inline'));
 						
 							$attr = array(
@@ -445,13 +486,17 @@ foreach($secciones->result() as $seccion) {
 									'name'	=>	'rdb_'.$pregunta->id_pregunta,
 									'value'	=>	0
 							);
+							if(isset($pregunta->opcion) && $pregunta->opcion == 0) {
+								$attr['checked'] = 'checked';
+							}
 							echo form_label(form_radio($attr)." Descuidado y sin calidad", '', array('class' => 'radio-inline'));
 							echo '<div class="form-group">';
 							$attr = array(
 									'id'	=>	'txt_'.$pregunta->id_pregunta,
 									'name'	=>	'txt_'.$pregunta->id_pregunta,
 									'class'	=>	'form-control',
-									'rows'	=>	'3'
+									'rows'	=>	'3',
+									'value'	=>	(isset($pregunta->justificacion)) ? $pregunta->justificacion : ""
 							);
 							echo form_label("Por favor justifique su respuesta:");
 							echo form_textarea($attr);

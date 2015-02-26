@@ -111,6 +111,30 @@ class Evaluador_model extends CI_Model {
 		}
 	}
 	
+	public function consultarDatosEvaluacionPorID($id) {
+		$this->db->select('ev.id_evaluacion, ev.fecha_evaluacion, ev.usuario, ev.solicitud, ev.comentarios, ev.estatus');
+		$this->db->from('evaluacion ev');
+		$this->db->where('ev.id_evaluacion', $id);
+		$query = $this->db->get();
+	
+		if($query->num_rows() > 0) {
+			return $query->row();
+		}
+	}
+	
+	public function consultarEvaluacionPorSolicitudUsuario($solicitud, $usuario) {
+		$this->db->select('ev.id_evaluacion, ev.solicitud, ev.estatus');
+		$this->db->from('evaluacion ev');
+		$this->db->where('ev.solicitud', $solicitud);
+		$this->db->where('ev.usuario', $usuario);
+		$this->db->where('ev.estatus >', 0);
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			return $query->row();
+		}
+	}
+	
 	public function consultarRespuestasPorEvaluacion($evaluacion) {
 		$this->db->select('ep.evaluacion, ep.pregunta, ep.opcion, ep.justificacion');
 		$this->db->from('evaluacion_pregunta ep');

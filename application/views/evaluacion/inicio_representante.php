@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(function() {
-	$("#formRevistas a").click(function(e) {
+	$("#formRevistas #evaluacion a").click(function(e) {
 		e.preventDefault();
 		var solicitud = $(this).data('id');
 		$("#hdnSolicitud").val(solicitud);
@@ -25,7 +25,7 @@ $attr = array(
 echo form_input($attr);
 ?>
 <h3>Bienvenido(a) <?php echo $usuario->nombre." ".$usuario->ap_paterno." ".$usuario->ap_materno; ?></h3>
-<div class="panel panel-primary">
+<div id="evaluacion" class="panel panel-primary">
   <div class="panel-heading">
   	<h3 class="panel-title">Evaluaciones propias</h3>
   </div>
@@ -100,7 +100,7 @@ echo form_input($attr);
       	echo "<td>".$evaluacion->{'calif_estatus_'.$evaluador->id_usuario}."</td>";
       }
       ?>
-      <td><?php echo $evaluacion->promedio; ?></td>
+      <td><?php printf("%.2f", $evaluacion->promedio); ?></td>
     </tr>
     <?php
     	$i++;

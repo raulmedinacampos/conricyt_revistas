@@ -30,7 +30,7 @@ class Representante_model extends CI_Model {
 	}
 	
 	public function consultarRevistasPorComision($comision) {
-		$this->db->select("s.id_solicitud, r.id_revista, r.nombre, ev.calificacion, ev.estatus");
+		$this->db->select("s.id_solicitud, r.id_revista, r.nombre, ev.id_evaluacion, ev.calificacion, ev.estatus");
 		$this->db->from('revista r');
 		$this->db->join('solicitud s', 'r.id_revista = s.revista');
 		$this->db->join('evaluador_revista er', 'r.id_revista = er.revista');
@@ -73,6 +73,41 @@ class Representante_model extends CI_Model {
 		if($query->num_rows() > 0) {
 			$calificacion = $query->row();
 			return $calificacion->calificacion; 
+		}
+	}
+	
+	public function consultarNombreRevistaPorID($id) {
+		$this->db->select('r.nombre');
+		$this->db->from('revista r');
+		$this->db->where('r.id_revista', $id);
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			$revista = $query->row();
+			return $revista->nombre;
+		}
+	}
+	
+	public function consultarEvaluacionPorID($evaluacion) {
+		$this->db->select('ev.id_evaluacion, ev.fecha_evaluacion, ev.usuario, ev.solicitud, ev.comentarios, ev.estatus');
+		$this->db->from('evaluacion ev');
+		$this->db->where('ev.id_evaluacion', $evaluacion);
+		$query = $this->db->get();
+	
+		if($query->num_rows() > 0) {
+			return $query->row();
+		}
+	}
+	
+	public function consultarEvaluacionPorSolicitudUsuario($solicitud, $usuario) {
+		$this->db->select('ev.id_evaluacion, ev.fecha_evaluacion, ev.usuario, ev.solicitud, ev.comentarios, ev.estatus');
+		$this->db->from('evaluacion ev');
+		$this->db->where('ev.solicitud', $solicitud);
+		$this->db->where('ev.usuario', $usuario);
+		$query = $this->db->get();
+	
+		if($query->num_rows() > 0) {
+			return $query->row();
 		}
 	}
 	

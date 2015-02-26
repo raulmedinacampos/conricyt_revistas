@@ -14,10 +14,26 @@ class Evaluador extends CI_Controller {
 		$this->load->model('login_model', 'usuario', TRUE);
 		
 		$evaluador = $this->session->userdata['id_usr'];
-		$data['revistas'] = $this->evaluador->consultarRevistasPorEvaluador($evaluador);
 		$data['usuario'] = $this->usuario->consultarUsuarioPorID($evaluador);
 		
 		$header['area'] = $this->evaluador->consultarAreaPorUsuario($evaluador);
+		
+		$revistas = $this->evaluador->consultarRevistasPorEvaluador($evaluador);
+		$revista_arr = array();
+		
+		foreach($revistas->result() as $revista) {
+			$evaluacion = $this->evaluador->consultarEvaluacionPorSolicitudUsuario($revista->id_solicitud, $evaluador);
+			
+			$revista_aux = new stdClass();
+			$revista_aux->id_solicitud = $revista->id_solicitud;
+			$revista_aux->id_evaluacion = (isset($evaluacion->id_evaluacion)) ? $evaluacion->id_evaluacion : "";
+			$revista_aux->nombre = $revista->nombre;
+			$revista_aux->institucion = $revista->institucion;
+			$revista_aux->estatus = (isset($evaluacion->estatus)) ? $evaluacion->estatus : 0;
+			$revista_arr[] = $revista_aux;
+		}
+		
+		$data['revistas'] = $revista_arr;
 		
 		$this->load->view('header', $header);
 		$this->load->view('evaluacion/revistas_asignadas', $data);
@@ -30,6 +46,7 @@ class Evaluador extends CI_Controller {
 		$this->load->library("Fecha");
 		
 		$id_solicitud = ($this->input->post('hdnSolicitud')) ? addslashes($this->input->post('hdnSolicitud')) : $this->session->flashdata('sess_solicitud');
+		$id_evaluacion = ($this->input->post('hdnEvaluacion')) ? addslashes($this->input->post('hdnEvaluacion')) : "";
 		
 		if(!$id_solicitud) {
 			redirect(base_url('evaluador'));
@@ -47,7 +64,7 @@ class Evaluador extends CI_Controller {
 		$solicitud = $this->evaluador->leerDatosSolicitudPorID($id_solicitud);
 		$editor = $this->evaluador->consultarEditorPorRevista($solicitud->revista);
 		$evaluador = $this->usuario->consultarUsuarioPorID($id_usuario);
-		$evaluacion = $this->evaluador->consultarDatosEvaluacionPorSolicitud($solicitud->id_solicitud);
+		$evaluacion = $this->evaluador->consultarDatosEvaluacionPorID($id_evaluacion);
 		
 		if($evaluacion) {
 			$respuestas = $this->evaluador->consultarRespuestasPorEvaluacion($evaluacion->id_evaluacion);
