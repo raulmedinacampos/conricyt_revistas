@@ -15,5 +15,12 @@ class Fecha {
 	
 		return $nFecha;
 	}
+	
+	public static function MostrarFormatoLargo($fecha) {
+		$arr_mes = array('', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre');
+		list($anio, $mes, $dia) = explode("-", $fecha);
+		
+		return "México, D.F., a ".(int)$dia." de ".$arr_mes[(int)$mes]." de ".$anio;
+	}
 }
 ?>

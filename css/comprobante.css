@@ -1,0 +1,123 @@
+@charset "utf-8";
+/* CSS Document */
+
+* {
+	font-family: Arial;
+}
+
+body, html {
+	margin: 0;
+	font-family: Arial;
+}
+
+body {
+	background: url(../images/fondo_pdf.jpg) no-repeat center center;
+}
+
+p {
+	clear: both;
+	font-size: 10pt;
+	text-align: justify;
+}
+
+ul {
+	list-style: none;
+}
+
+#datos {
+	font-size: 8pt;
+}
+
+#logo-mexico {
+	height: 58pt;
+	margin-top: 5pt;
+}
+
+#logo-conacyt {
+	float: right;
+	height: 66pt;
+}
+
+.titulo1, .titulo2 {
+	font-size: 11pt;
+	text-align: right;
+	margin: 0;
+}
+
+.titulo1 {
+	font-weight: bold;
+}
+
+.titulo3, .titulo4 {
+	font-weight: bold;
+	text-align: center;
+}
+
+.titulo3 {
+	font-size: 11pt;
+}
+
+.titulo4 {
+	font-size: 14pt;
+}
+
+.fecha {
+	margin: 0 0 40pt 0;
+	text-align: right;
+}
+
+.remitente {
+	float: left;
+	width: 380pt;
+	margin-bottom: 25pt;
+	font-weight: bold;
+}
+
+.comentarios {
+	padding: 2pt 4pt;
+	margin-top: 5pt;
+	border-style: solid;
+	border-color: #428BCA;
+	border-width: 1pt;
+	border-radius: 4pt;
+	background-color: #D9EDF7;
+}
+
+.lista {
+	padding-left: 20pt;
+}
+
+.firma1, .firma2 {
+	float: left;
+	width: 46%;
+	padding-top: 50pt;
+	font-size: 10pt;
+	text-align: center;
+}
+
+.firma1 {
+	margin: 2pt 12pt;
+}
+
+.firma2 {
+	margin: 0pt 12pt;
+}
+
+.firma-ultimo {
+	width: 100%;
+	padding-top: 50pt;
+	margin: 2pt 0;
+	font-size: 10pt;
+	text-align: center;
+}
+
+.paginacion {
+	text-align: center;
+}
+
+.footer {
+	font-family: "Times New Roman";
+	font-size: 9pt;
+	color: #868686;
+	text-align: center;
+}

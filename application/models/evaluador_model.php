@@ -68,6 +68,7 @@ class Evaluador_model extends CI_Model {
 		$this->db->join('evaluador_revista er', 'r.id_revista = er.revista');
 		$this->db->join('evaluacion ev', 's.id_solicitud = ev.solicitud', "left");
 		$this->db->where('er.usuario', $evaluador);
+		$this->db->group_by('r.nombre');
 		$this->db->order_by('r.nombre');
 		$query = $this->db->get();
 		
@@ -115,6 +116,7 @@ class Evaluador_model extends CI_Model {
 		$this->db->select('ev.id_evaluacion, ev.fecha_evaluacion, ev.usuario, ev.solicitud, ev.comentarios, ev.estatus');
 		$this->db->from('evaluacion ev');
 		$this->db->where('ev.id_evaluacion', $id);
+		$this->db->where('ev.estatus >', 0);
 		$query = $this->db->get();
 	
 		if($query->num_rows() > 0) {

@@ -117,6 +117,14 @@ echo form_open(base_url(), $attr);
 			'type'	=>	'hidden'
 	);
 	echo form_input($attr);
+	
+	$attr = array(
+			'id'	=>	'id_evaluacion',
+			'name'	=>	'id_evaluacion',
+			'value'	=>	(isset($datos->id_evaluacion)) ? $datos->id_evaluacion : "",
+			'type'	=>	'hidden'
+	);
+	echo form_input($attr);
 	echo '</div>';
 	echo '</div>';
 	

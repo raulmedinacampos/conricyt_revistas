@@ -46,7 +46,7 @@ class Evaluador extends CI_Controller {
 		$this->load->library("Fecha");
 		
 		$id_solicitud = ($this->input->post('hdnSolicitud')) ? addslashes($this->input->post('hdnSolicitud')) : $this->session->flashdata('sess_solicitud');
-		$id_evaluacion = ($this->input->post('hdnEvaluacion')) ? addslashes($this->input->post('hdnEvaluacion')) : "";
+		$id_evaluacion = ($this->input->post('hdnEvaluacion')) ? addslashes($this->input->post('hdnEvaluacion')) : $this->session->flashdata('sess_evaluacion');
 		
 		if(!$id_solicitud) {
 			redirect(base_url('evaluador'));
@@ -101,6 +101,7 @@ class Evaluador extends CI_Controller {
 			$datos->fecha_evaluacion = Fecha::ConvertirNormal($evaluacion->fecha_evaluacion);
 			$datos->estatus = $evaluacion->estatus;
 			$datos->comentarios = $evaluacion->comentarios;
+			$datos->id_evaluacion = $evaluacion->id_evaluacion;
 		}
 		
 		$datos->folio = $solicitud->folio;
@@ -120,12 +121,15 @@ class Evaluador extends CI_Controller {
 	public function guardar() {
 		$this->load->library("Fecha");
 		
+		$id_ev = $this->input->post('id_evaluacion');
+		
 		$data['fecha_evaluacion'] = addslashes($this->input->post('fecha_evaluacion'));
 		$data['fecha_evaluacion'] = Fecha::ConvertirMySQL($data['fecha_evaluacion']);
 		$data['solicitud'] = $this->input->post('id_solicitud');
 		$data['usuario'] = $this->session->userdata['id_usr'];
 		$data['comentarios'] = addslashes($this->input->post('comentarios'));
-		$evaluacion = $this->evaluador->consultarDatosEvaluacionPorSolicitud($data['solicitud']);
+		//$evaluacion = $this->evaluador->consultarDatosEvaluacionPorSolicitud($data['solicitud']);
+		$evaluacion = $this->evaluador->consultarDatosEvaluacionPorID($id_ev);
 		if($evaluacion) {
 			$data['fecha_modificacion'] = date('Y-m-d H:i:s');
 			$this->evaluador->actualizarEvaluacion($evaluacion->id_evaluacion, $data);
@@ -156,21 +160,26 @@ class Evaluador extends CI_Controller {
 			}
 		}
 		
-		$this->session->set_flashdata('sess_solicitud', $data['solicitud']);
+		$this->session->set_flashdata('sess_solicitud', $id_ev);
+		$this->session->set_flashdata('sess_evaluacion', $data['solicitud']);
 	}
 	
 	public function guardarCambios() {
 		$id_solicitud = $this->input->post('id_solicitud');
+		$id_evaluacion = $this->input->post('id_evaluacion');
 		$this->guardar();
 		$this->session->set_flashdata('sess_solicitud', $id_solicitud);
+		$this->session->set_flashdata('sess_evaluacion', $id_evaluacion);
 		redirect(base_url('evaluador/evaluacion'));
 	}
 	
 	public function finalizarEvaluacion() {
 		$id_solicitud = $this->input->post('id_solicitud');
+		$id_ev = $this->input->post('id_evaluacion');
 		$this->guardar();
 		
-		$evaluacion = $this->evaluador->consultarDatosEvaluacionPorSolicitud($id_solicitud);
+		//$evaluacion = $this->evaluador->consultarDatosEvaluacionPorSolicitud($id_solicitud);
+		$evaluacion = $this->evaluador->consultarDatosEvaluacionPorID($id_ev);
 		if($evaluacion) {
 			$data['fecha_modificacion'] = date('Y-m-d H:i:s');
 			$data['calificacion'] =  $this->input->post('calificacion_final');
