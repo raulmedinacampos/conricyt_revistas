@@ -264,5 +264,87 @@ class Reporte extends CI_Controller {
 		$this->load->view('reportes/areas', $data);
 		$this->load->view('footer');
 	}
+	
+	public function dictamen() {
+		$dictamenes = $this->reporte->consultarDictamenes();
+		$dictamenes = $dictamenes->result();
+		
+		$xls = addslashes($this->uri->segment(3));
+		
+		if($xls) {
+			$this->load->library('excel');
+			$fila = 1;
+		
+			// Contenido de las celdas
+			$this->excel->setActiveSheetIndex(0);
+			$this->excel->getActiveSheet()->getStyle('A'.$fila)->getFont()->setBold(true);
+			$this->excel->getActiveSheet()->getStyle('A'.$fila)->getFont()->setSize(18);
+			$this->excel->getActiveSheet()->setCellValue('A'.$fila, utf8_encode('Dictámenes de la revistas'));
+			$fila+=2;
+		
+			// Encabezados
+			$this->excel->getActiveSheet()->getStyle('A'.$fila.':F'.$fila)->getFont()->setBold(true);
+			$this->excel->getActiveSheet()->getStyle('A'.$fila.':F'.$fila)->getFont()->getColor()->setRGB('FFFFFF');
+			$this->excel->getActiveSheet()->getStyle('A'.$fila.':F'.$fila)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('5B9BD5');
+			$this->excel->getActiveSheet()->getStyle('A'.$fila.':F'.$fila)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		
+			$this->excel->getActiveSheet()
+			->setCellValue('A'.$fila, utf8_encode('Nombre de la revista'))
+			->setCellValue('B'.$fila, utf8_encode('Área de conocimiento'))
+			->setCellValue('C'.$fila, utf8_encode('Tipo de solicitud'))
+			->setCellValue('D'.$fila, utf8_encode('Institución'))
+			->setCellValue('E'.$fila, utf8_encode('Dictamen'))
+			->setCellValue('F'.$fila, utf8_encode('Comentarios'));
+			$fila++;
+				
+			// Datos
+			for($i=0; $i<sizeof($dictamenes); $i++) {
+				$row = $dictamenes[$i];
+				$this->excel->getActiveSheet()
+				->setCellValue('A'.$fila, $row->nombre)
+				->setCellValue('B'.$fila, $row->area_conocimiento)
+				->setCellValue('C'.$fila, $row->tipo_solicitud)
+				->setCellValue('D'.$fila, $row->institucion)
+				->setCellValue('E'.$fila, $row->dictamen)
+				->setCellValue('F'.$fila, $row->comentarios);
+					
+				$setColor = ($fila > 1 && $fila % 2 == 1) ? true : false;
+					
+				if($setColor) {
+					$this->excel->getActiveSheet()->getStyle('A'.$fila.':F'.$fila)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('DEE1E2');
+				}
+					
+				$fila++;
+			}
+		
+			// Ancho de las columnas
+			$this->excel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+			$this->excel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+			$this->excel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+			$this->excel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+			$this->excel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+			$this->excel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+		
+			// Nombre de la hoja
+			$this->excel->getActiveSheet()->setTitle(utf8_encode('Dictámenes'));
+		
+			// Headers para salida de archivo xlsx
+			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+			header('Content-Disposition: attachment;filename="Dictamenes.xlsx"');
+			header('Cache-Control: max-age=0');
+			// Header para IE9
+			header('Cache-Control: max-age=1');
+		
+			$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+			$objWriter->save("php://output");
+			exit();
+		}
+		
+		$data['dictamenes'] = $this->reporte->consultarDictamenes();
+		
+		$this->load->view('header');
+		$this->load->view('reportes/dictamenes', $data);
+		$this->load->view('footer');
+	}
 }
 ?>

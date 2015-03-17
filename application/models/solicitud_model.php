@@ -99,6 +99,7 @@ class Solicitud_model extends CI_Model {
 	public function consultarSolicitudPorUsuario($usr) {
 		$this->db->from('solicitud s');
 		$this->db->where('s.usuario', $usr);
+		$this->db->where('estatus >', 0);
 		$query = $this->db->get();
 		
 		if($query->num_rows() > 0) {
@@ -154,6 +155,17 @@ class Solicitud_model extends CI_Model {
 		$this->db->where('e.id_editor', $id);
 		$query = $this->db->get();
 	
+		if($query->num_rows() > 0) {
+			return $query->row();
+		}
+	}
+	
+	public function consultarAreaPorID($id) {
+		$this->db->select('id_area_conocimiento, num_area, area_conocimiento');
+		$this->db->from('cat_area_conocimiento');
+		$this->db->where('id_area_conocimiento', $id);
+		$query = $this->db->get();
+		
 		if($query->num_rows() > 0) {
 			return $query->row();
 		}

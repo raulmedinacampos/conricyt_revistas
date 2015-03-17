@@ -267,4 +267,21 @@ class Reporte_model extends CI_Model {
 			return $query->row();
 		}
 	}
+	
+	public function consultarDictamenes() {
+		$this->db->select('r.nombre, r.institucion, cts.tipo_solicitud, cac.area_conocimiento, cd.dictamen, d.comentarios');
+		$this->db->from('dictamen d');
+		$this->db->join('solicitud s', 'd.solicitud = s.id_solicitud');
+		$this->db->join('revista r', 's.revista = r.id_revista');
+		$this->db->join('cat_dictamen cd', 'd.dictamen = cd.id_dictamen');
+		$this->db->join('cat_area_conocimiento cac', 'r.area_conocimiento = cac.id_area_conocimiento');
+		$this->db->join('cat_tipo_solicitud cts', 's.tipo_solicitud = cts.id_tipo_solicitud');
+		$this->db->where('d.estatus', 5);
+		$this->db->order_by('r.area_conocimiento, r.nombre');
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			return $query;
+		}
+	}
 }

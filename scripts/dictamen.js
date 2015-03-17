@@ -33,6 +33,18 @@ function validarFormulario() {
 			$("#mensajesError").modal('show');
 		}
 	});
+	
+	$("#btnFinalizar").click(function() {
+		$("#hdnFinalizar").val("1");
+		if($("#formDictamen").valid()) {
+			$("#formDictamen").submit();
+		} else {
+			$("#mensajesError h4.modal-title").html("Error");
+			$("#mensajesError .btn-default").html("Aceptar");
+			$("#mensajesError .btn-primary").css("display", "none");
+			$("#mensajesError").modal('show');
+		}
+	});
 }
 
 function imprimirComprobante() {

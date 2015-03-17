@@ -41,6 +41,18 @@ class Representante_model extends CI_Model {
 		}
 	}
 	
+	public function consultarEvaluadorPorEvaluacion($evaluacion) {
+		$this->db->select('u.id_usuario, u.nombre, u.ap_paterno, u.ap_materno');
+		$this->db->from('usuario u');
+		$this->db->join('evaluacion ev', 'u.id_usuario = ev.usuario');
+		$this->db->where('ev.id_evaluacion', $evaluacion);
+		$query = $this->db->get();
+		
+		if($query->num_rows()) {
+			return $query->row();
+		}
+	}
+	
 	public function consultarRevistasPorComision($comision) {
 		$this->db->select("s.id_solicitud, r.id_revista, r.nombre, ev.id_evaluacion, ev.calificacion, ev.estatus");
 		$this->db->from('revista r');
@@ -142,7 +154,7 @@ class Representante_model extends CI_Model {
 	}
 	
 	public function consultarEvaluacionPorSolicitud($solicitud) {
-		$this->db->select('ev.id_evaluacion, ev.calificacion, ev.estatus, u.nombre, u.ap_paterno, u.ap_materno');
+		$this->db->select('ev.id_evaluacion, ev.calificacion, ev.comentarios, ev.estatus, u.nombre, u.ap_paterno, u.ap_materno');
 		$this->db->from('evaluacion ev');
 		$this->db->join('usuario u', 'ev.usuario = u.id_usuario');
 		$this->db->where('ev.solicitud', $solicitud);
@@ -177,6 +189,7 @@ class Representante_model extends CI_Model {
 		$this->db->where('u.tipo_usuario', 4);
 		$this->db->where('u.estatus', 1);
 		$this->db->group_by('u.id_usuario');
+		$this->db->order_by('u.nombre, u.ap_paterno, u.ap_materno');
 		$query = $this->db->get();
 		
 		if($query->num_rows() > 0) {
@@ -185,12 +198,12 @@ class Representante_model extends CI_Model {
 	}
 	
 	public function consultarDictamenPorSolicitudUsuario($solicitud, $usuario) {
-		$this->db->select('cd.id_dictamen, cd.dictamen, d.comentarios');
+		$this->db->select('d.id_dictamen AS id, cd.id_dictamen, cd.dictamen, d.comentarios, d.estatus');
 		$this->db->from('dictamen d');
 		$this->db->join('cat_dictamen cd', 'd.dictamen = cd.id_dictamen');
 		$this->db->where('d.solicitud', $solicitud);
 		$this->db->where('d.usuario', $usuario);
-		$this->db->where('d.estatus', 1);
+		$this->db->where('d.estatus >', 0);
 		$query = $this->db->get();
 		
 		if($query->num_rows() > 0) {
@@ -243,6 +256,50 @@ class Representante_model extends CI_Model {
 		}
 	}
 	
+	public function consultarDictamenPorSolicitud($solicitud) {
+		$this->db->select('cd.dictamen, d.comentarios, d.estatus');
+		$this->db->from('evaluacion ev');
+		$this->db->join('solicitud s', 'ev.solicitud = s.id_solicitud');
+		$this->db->join('revista r', 's.revista = r.id_revista');
+		$this->db->join('dictamen d', 's.id_solicitud = d.solicitud');
+		$this->db->join('cat_dictamen cd', 'd.dictamen = cd.id_dictamen');
+		$this->db->where('d.solicitud', $solicitud);
+		$this->db->where('d.estatus >', 0);
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			return $query->row();
+		}
+	}
+	
+	public function consultarRenovacionesAutomaticas() {
+		$this->db->select('s.id_solicitud, r.id_revista, r.nombre, r.institucion, cac.area_conocimiento');
+		$this->db->from('solicitud s');
+		$this->db->join('revista r', 's.revista = r.id_revista');
+		$this->db->join('cat_area_conocimiento cac', 'r.area_conocimiento = cac.id_area_conocimiento');
+		$this->db->where('s.tipo_solicitud', 3);
+		$this->db->where('s.estatus >', 0);
+		$this->db->order_by('cac.id_area_conocimiento, r.nombre');
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			return $query;
+		}
+	}
+	
+	public function consultarResultadoPorUsuario($usr) {
+		$this->db->select('r.nombre, r.institucion, s.id_solicitud, s.revista, r.area_conocimiento AS area, r.disciplina');
+		$this->db->from('revista r');
+		$this->db->join('solicitud s', 'r.id_revista = s.revista');
+		$this->db->where('s.usuario', $usr);
+		$this->db->where('s.estatus', 5);
+		$query = $this->db->get();
+		
+		if($query->num_rows() > 0) {
+			return $query->row();
+		}
+	}
+	
 	public function verificarEvaluacionAsignada($usuario, $revista) {
 		$this->db->from('evaluador_revista');
 		$this->db->where('usuario', $usuario);
@@ -256,6 +313,23 @@ class Representante_model extends CI_Model {
 	
 	public function guardarDictamen($data) {
 		if($this->db->insert('dictamen', $data)) {
+			return $this->db->insert_id();
+		}
+	}
+	
+	public function actualizarDictamen($id, $data) {
+		$this->db->where('id_dictamen', $id);
+	
+		if($this->db->update('dictamen', $data)) {
+			return true;
+		}
+	}
+	
+	public function finalizarDictamen($id, $data) {
+		$this->db->set('estatus', 5);
+		$this->db->where('id_dictamen', $id);
+		
+		if($this->db->update('dictamen', $data)) {
 			return true;
 		}
 	}

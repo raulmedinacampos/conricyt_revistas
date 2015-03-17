@@ -24,6 +24,11 @@ ul {
 	list-style: none;
 }
 
+td {
+	padding: 2px 5px;
+	vertical-align: top;
+}
+
 #datos {
 	font-size: 8pt;
 }

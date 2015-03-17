@@ -136,9 +136,11 @@ class Representante_comite extends CI_Controller {
 			$evaluacion->fecha_evaluacion = Fecha::ConvertirNormal($evaluacion->fecha_evaluacion);
 			$data['evaluacion'] = $evaluacion;
 			$respuestas = $this->evaluador->consultarRespuestasPorEvaluacion($evaluacion->id_evaluacion);
+			$data['evaluador'] = $this->representante->consultarEvaluadorPorEvaluacion($evaluacion->id_evaluacion);
 		}
 		
 		if($solicitud) {
+			$data['id_revista'] = $solicitud->revista;
 			$solicitud->revista = $this->representante->consultarNombreRevistaPorID($solicitud->revista);
 		}
 		
@@ -185,12 +187,39 @@ class Representante_comite extends CI_Controller {
 			$areas = "1,2,3,6,7,8";
 		} else if(in_array($area, $grupo2)) {
 			$areas = "4,5,8";
-		} else {
+		}
+		
+		//if($area == 5 || $area == 8) {
+		if($area == 8) {
 			$areas = "1,2,3,4,5,6,7,8";
 		}
 		
+		$revistas = $this->representante->consultarRevistasPorGrupo($areas);
+		$arr_revistas = array();
+		
+		foreach($revistas->result() as $revista) {
+			$dictamen = $this->representante->consultarDictamenPorSolicitud($revista->id_solicitud);
+			
+			$dato = new stdClass();
+			$dato->dictamen = "Pendiente";
+			$dato->comentarios = "No hay comentarios disponibles";
+			$dato->id_evaluacion = $revista->id_evaluacion;
+			$dato->id_solicitud = $revista->id_solicitud;
+			$dato->id_revista = $revista->id_revista;
+			$dato->area_conocimiento = $revista->area_conocimiento;
+			$dato->nombre = $revista->nombre;
+			
+			if($dictamen) {
+				$dato->dictamen = $dictamen->dictamen;
+				$dato->comentarios = $dictamen->comentarios;
+			}
+			
+			$arr_revistas[] = $dato;
+		}
+		
 		$data['areas'] = $this->representante->consultarAreasPorGrupo($areas);
-		$data['revistas'] = $this->representante->consultarRevistasPorGrupo($areas);
+		$data['area_evaluador'] = $area;
+		$data['revistas'] = $arr_revistas;
 		$data['evaluaciones'] = $this->representante->consultarEvaluacionesPorGrupo($areas);
 		
 		$header['area'] = $area;
@@ -226,21 +255,62 @@ class Representante_comite extends CI_Controller {
 		$data['evaluaciones'] = $evaluaciones;
 		$data['promedio'] = $promedio;
 		$data['dictamen'] = $this->representante->consultarDictamenPorSolicitudUsuario($id_solicitud, $evaluador);
+		$data['area'] = $header['area'];
 		
 		$this->load->view('header', $header);
 		$this->load->view('evaluacion/dictamen', $data);
 		$this->load->view('footer');
 	}
 	
+	public function renovacion_automatica() {
+		$this->load->helper('form');
+		
+		$data['revistas'] = $this->representante->consultarRenovacionesAutomaticas();
+		
+		$this->load->view('header');
+		$this->load->view('evaluacion/renovacion_automatica', $data);
+		$this->load->view('footer');
+	}
+	
 	public function guardarDictamen() {
+		$this->load->model('evaluador_model', 'evaluador', TRUE);
+		
+		$id_dictamen = $this->input->post('hdnDictamen');
+		$finalizar = $this->input->post('hdnFinalizar');
+		$area = $this->evaluador->consultarAreaPorUsuario($this->session->userdata['id_usr']);
+		
 		$data['solicitud'] = $this->input->post('hdnSolicitud');
 		$data['dictamen'] = $this->input->post('dictamen');
 		$data['comentarios'] = $this->input->post('comentarios');
 		$data['usuario'] = $this->input->post('hdnEvaluador');
 		
-		if($this->representante->guardarDictamen($data)) {
-			redirect(base_url('representante-comite/dictamen/'.$data['solicitud']));
+		if($finalizar) {
+			if($this->representante->finalizarDictamen($id_dictamen, $data)) {
+				redirect(base_url('representante-comite/dictamen/'.$data['solicitud']));
+				exit();
+			}
 		}
+		
+		if($area == 8) {
+			$id_dictamen = $this->representante->guardarDictamen($data);
+			
+			if($this->representante->finalizarDictamen($id_dictamen, $data)) {
+				redirect(base_url('representante-comite/dictamen/'.$data['solicitud']));
+			}
+		} else {
+			if(!$id_dictamen) {
+				if($this->representante->guardarDictamen($data)) {
+					redirect(base_url('representante-comite/evaluacion/'));
+				}
+			} else {
+				//if($this->representante->finalizarDictamen($id_dictamen, $data)) {
+				if($this->representante->actualizarDictamen($id_dictamen, $data)) {
+					//redirect(base_url('representante-comite/dictamen/'.$data['solicitud']));
+					redirect(base_url('representante-comite/evaluacion/'));
+				}
+			}
+		}
+		
 	}
 	
 	public function generarComprobante() {
@@ -249,6 +319,7 @@ class Representante_comite extends CI_Controller {
 		$pdf = $this->pdf->load("c", "Letter", "", "", 20, 20, 45, 30, 10, 10);
 		
 		$id_solicitud = $this->input->post('hdnSolicitud2');
+		$renovacion = $this->input->post('hdnRenovacion');
 		
 		if(!$id_solicitud) {
 			redirect(base_url('representante-comite/evaluacion'));
@@ -256,29 +327,32 @@ class Representante_comite extends CI_Controller {
 		
 		$areas = "";
 		$calificacion = 0;
+		
 		$evaluaciones = $this->representante->consultarEvaluacionPorSolicitud($id_solicitud);
 		$revista = $this->representante->consultarRevistaPorSolicitud($id_solicitud);
 		$dictamen = $this->representante->consultarDictamenPorSolicitudUsuario($id_solicitud, $this->session->userdata['id_usr']);
+		
 		$grupo1 = array(1,2,3,6,7,8);
 		$grupo2 = array(4,5,8);
 		
 		if(in_array($revista->area, $grupo1)) {
-			echo "Es del grupo 1";
 			$areas = "1,2,3,6,7,8";
 		} else if (in_array($revista->area, $grupo2)) {
-			echo "Es del grupo 2";
 			$areas = "4,5,8";
 		} else {
 			$areas = "1,2,3,4,5,6,7,8";
 		}
 		
-		foreach($evaluaciones->result() as $evaluacion) {
-			$calificacion += $evaluacion->calificacion;
+		if($evaluaciones) {
+			foreach($evaluaciones->result() as $evaluacion) {
+				$calificacion += $evaluacion->calificacion;
+			}
+			
+			$calificacion = $calificacion / $evaluaciones->num_rows();
 		}
 		
-		$calificacion = $calificacion / $evaluaciones->num_rows();
-		
-		$evaluadores = $this->representante->consultarRepresentantesPorArea($areas);
+		//$evaluadores = $this->representante->consultarRepresentantesPorArea($areas);
+		$evaluadores = $this->representante->consultarRepresentantesPorArea("1,2,3,4,5,6,7,8");
 		
 		$header = '<p class="header"><img id="logo-mexico" src="'.base_url('images/mexico_comprobante.png').'" /><img id="logo-conacyt" src="'.base_url('images/conacyt_comprobante.gif').'" /><div style="clear:both;"></div></p>';
 		$footer = '<p class="paginacion">Página {PAGENO} de {nb}</p>';
@@ -291,17 +365,17 @@ class Representante_comite extends CI_Controller {
 		$html .= '<p class="titulo2">Dirección de Planeación de Ciencia</p>';
 		$html .= '<p class="fecha">'.Fecha::MostrarFormatoLargo(date('Y-m-d')).'</p>';
 		
-		$html .= '<p class="titulo3">Índices de Revistas Mexicanas de Investigación Científica y Tecnológica<br/>';
+		$html .= '<p class="titulo3">Índice de Revistas Mexicanas de Investigación Científica y Tecnológica<br/>';
 		$html .= 'Convocatoria 2014 - 2015</p>';
 		
-		$html .= '<p class="titulo4">ACTA DE DICTAMEN</p>';
+		$html .= '<p class="titulo4">DICTAMEN FINAL</p>';
 		
 		$html .= '<table id="datos">';
 		$html .= '<tr>';
-		$html .= '<td>Número de solicitud:</td>';
-		$html .= '<td><strong>'.$revista->folio.'</strong></td>';
-		$html .= '<td>Nombre de la revista:</td>';
-		$html .= '<td><strong>'.utf8_decode($revista->nombre).'</strong></td>';
+		$html .= '<td style="width:20%">Número de solicitud:</td>';
+		$html .= '<td style="width:30%"><strong>'.$revista->folio.'</strong></td>';
+		$html .= '<td style="width:20%">Nombre de la revista:</td>';
+		$html .= '<td style="width:30%"><strong>'.utf8_decode($revista->nombre).'</strong></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>Institución editora:</td>';
@@ -312,44 +386,65 @@ class Representante_comite extends CI_Controller {
 		$html .= '<tr>';
 		$html .= '<td>Tipo de solicitud:</td>';
 		$html .= '<td><strong>'.utf8_decode($revista->tipo_solicitud).'</strong></td>';
-		$html .= '<td>Puntaje total obtenido de la evaluación:</td>';
-		$html .= '<td><strong>'.number_format($calificacion, 2).'</strong></td>';
+		$html .= '<td></td>';
+		$html .= '<td></td>';
+		//$html .= '<td>Evaluación ponderada:</td>';
+		//$html .= '<td><strong>'.number_format($calificacion, 2).'</strong></td>';
 		$html .= '</tr>';
 		$html .= '</table>';
 		
-		$html .= '<table>';
+		$txt_convocatoria = "";
+		$convocatoria = "";
+		$proxima = "";
+		switch($dictamen->id_dictamen) {
+			case 1:
+				$txt_convocatoria = "Próxima convocatoria:";
+				$convocatoria = "<br />Enero 2015 - Diciembre 2017";
+				$proxima = "2018";
+				break;
+			case 2:
+				$txt_convocatoria = "Próxima convocatoria:";
+				$convocatoria = "<br />Enero 2015 - Diciembre 2016";
+				$proxima = "2017";
+				break;
+			case 3:
+				$txt_convocatoria = "";
+				$convocatoria = "";
+				$proxima = "";
+				break;
+			default:
+				$txt_convocatoria = "Próxima convocatoria:";
+				$convocatoria = "<br />Enero 2015 - Diciembre 2017";
+				$proxima = "2018";
+				break;
+		}
+		
+		$html .= '<br />';
+		$html .= '<table id="dictamen">';
 		$html .= '<tr>';
 		$html .= '<td>Dictamen:</td>';
-		$html .= '<td>Aprobada (5 años) <input type="radio" '.(($dictamen->id_dictamen == 1) ? 'checked="checked"' : '').' /></td>';
+		
+		if(!$dictamen) {
+			$html .= '<td><strong>Aprobada (3 años)'.$convocatoria.'</strong></td>';
+		} else {
+			$html .= '<td><strong>'.utf8_decode($dictamen->dictamen).$convocatoria.'</strong></td>';
+		}
 		$html .= '</tr>';
 		$html .= '<tr>';
-		$html .= '<td></td>';
-		$html .= '<td>Aprobada condicionada (2 años) <input type="radio" '.(($dictamen->id_dictamen == 2) ? 'checked="checked"' : '').' /></td>';
-		$html .= '</tr>';
-		$html .= '<tr>';
-		$html .= '<td></td>';
-		$html .= '<td>No aprobada <input type="radio" '.(($dictamen->id_dictamen == 3) ? 'checked="checked"' : '').' /></td>';
+		$html .= '<td>'.$txt_convocatoria.'</td>';
+		$html .= '<td><strong>'.$proxima.'</strong></td>';
 		$html .= '</tr>';
 		$html .= '</table>';
+		$html .= '<br />';
 		
-		$html .= 'Comentarios, observaciones y sugerencias para ser considerados por el Editor de la revista.';
-		$html .= '<div class="comentarios">'.utf8_decode($dictamen->comentarios).'</div>';
-		
-		$i = 1;
-		foreach($evaluadores->result() as $evaluador) {
-			$clase = "firma";
-			($i%2 == 1) ? $clase.="1" : $clase.="2";
-			
-			if($i%2 == 1 && $i == $evaluadores->num_rows()) {
-				$clase ="firma-ultimo";
-			}
-			
-			$html .= '<div class="'.$clase.'">';
-			$html .= '________________________________________';
-			$html .= '<br />';
-			$html .= trim(utf8_decode($evaluador->nombre." ".$evaluador->ap_paterno." ".$evaluador->ap_materno));
-			$html .= '</div>';
-			$i++;
+		if(!$renovacion) {
+			$html .= 'Comentarios, observaciones y sugerencias para ser considerados por el Editor de la revista.';
+			$html .= '<div class="comentarios">'.nl2br(utf8_decode($dictamen->comentarios)).'</div>';
+		} else {
+			$html .= '<p>Estimado(a) editor(a):</p>';
+			$html .= '<p>Nos es grato informale que este Comité ha otorgado el fallo aprobatorio a la solicitud de renovación automática por tres años de la revista que representa.</p>';
+			$html .= '<p>Le invitamos a mantener, o mejor aún superar el trabajo que han realizado hasta ahora para que su reviste llegue a ser considerada como directriz ';
+			$html .= 'para aquellas que año con año aspiran a ser incluidas en el Índice de Revistas Mexicanas de Investigación Científica y Tecnológica - CONACYT.</p>';
 		}
 		
 		$html .= '</div>';  // Div contenido
@@ -364,7 +459,53 @@ class Representante_comite extends CI_Controller {
 		$pdf->SetHTMLFooter(utf8_encode($footer));
 		$pdf->WriteHTML($stylesheet, 1);
 		$pdf->WriteHTML(utf8_encode($html));
-		$pdf->Output('comprobante.pdf', 'D');
+		
+		$pdf->AddPage();
+		$html = '';
+		
+		$html .= '<div class="contenido">';
+		$html .= '<p class="titulo4">DICTAMEN FINAL</p>';
+		
+		$html .= '<table id="datos">';
+		$html .= '<tr>';
+		$html .= '<td style="width:20%">Número de solicitud:</td>';
+		$html .= '<td style="width:30%"><strong>'.$revista->folio.'</strong></td>';
+		$html .= '<td style="width:20%">Nombre de la revista:</td>';
+		$html .= '<td style="width:30%"><strong>'.utf8_decode($revista->nombre).'</strong></td>';
+		$html .= '</tr>';
+		$html .= '<tr>';
+		$html .= '<td>Institución editora:</td>';
+		$html .= '<td><strong>'.utf8_decode($revista->institucion).'</strong></td>';
+		$html .= '<td>Área:</td>';
+		$html .= '<td><strong>'.utf8_decode($revista->area_conocimiento).'</strong></td>';
+		$html .= '</tr>';
+		$html .= '</table>';
+		
+		$i = 1;
+		foreach($evaluadores->result() as $evaluador) {
+			$clase = "firma";
+			($i%2 == 1) ? $clase.="1" : $clase.="2";
+				
+			if($i%2 == 1 && $i == $evaluadores->num_rows()) {
+				$clase ="firma-ultimo";
+			}
+				
+			$html .= '<div class="'.$clase.'">';
+			$html .= '________________________________________';
+			$html .= '<br />';
+			$html .= trim(utf8_decode($evaluador->nombre." ".$evaluador->ap_paterno." ".$evaluador->ap_materno));
+			$html .= '</div>';
+			$i++;
+		}
+		
+		$html .= '</div>';  // Div contenido
+		
+		$pdf->SetHTMLHeader(utf8_encode($header));
+		$pdf->SetHTMLFooter(utf8_encode($footer));
+		$pdf->WriteHTML($stylesheet, 1);
+		$pdf->WriteHTML(utf8_encode($html));
+		
+		$pdf->Output('hoja_de_fallo.pdf', 'D');
 	}
 }
 ?>

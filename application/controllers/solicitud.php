@@ -79,6 +79,30 @@ class Solicitud extends CI_Controller {
 		}
 	}
 	
+	public function resultados() {
+		$this->load->model('representante_model', 'representante', TRUE);
+		
+		$solicitud = $this->representante->consultarResultadoPorUsuario($this->session->userdata('id_usr'));
+		
+		if(!$solicitud) {
+			redirect(base_url('solicitud'));
+		}
+		
+		$revista = $this->solicitud->consultarRevistaPorSolicitud($solicitud->revista);
+		
+		$data['solicitud'] = $solicitud;
+		$data['revista'] = $revista;
+		
+		$data['editor'] = $this->solicitud->consultarEditorPorID($revista->editor);
+		$data['area'] = $this->solicitud->consultarAreaPorID($revista->area_conocimiento);
+		$data['evaluaciones'] = $this->representante->consultarEvaluacionPorSolicitud($solicitud->id_solicitud);
+		$data['dictamen'] = $this->representante->consultarDictamenPorSolicitud($solicitud->id_solicitud);
+		
+		$this->load->view('header');
+		$this->load->view('evaluacion/resultados', $data);
+		$this->load->view('footer');
+	}
+	
 	public function mostrarError() {
 		$this->load->view('header');
 		$this->load->view('solicitud/error');

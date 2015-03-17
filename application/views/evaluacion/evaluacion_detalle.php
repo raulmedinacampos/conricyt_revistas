@@ -20,7 +20,13 @@
   	  <tr>
   	  	<td>Nombre de la revista: <strong><?php echo $solicitud->revista; ?></td>
   	  </tr>
-  	</table>
+  	  <tr>
+  	  	<td>Evaluador: <strong><?php echo trim($evaluador->nombre." ".$evaluador->ap_paterno." ".$evaluador->ap_materno); ?></td>
+  	  </tr>
+  	  <tr>
+  	  	<td><a href="<?php echo base_url('revista/detalle/'.$id_revista); ?>"><span class="btn btn-xs btn-warning">Datos y documentos de la revista</span></a></td>
+  	  </tr>
+  	  </table>
   </div>
 </div>
 <?php

@@ -36,7 +36,7 @@ class Login extends CI_Controller {
 					redirect(base_url('evaluador'));
 					break;
 				case 3:
-					redirect(base_url('solicitud'));
+					redirect(base_url('solicitud/resultados'));
 					break;
 				case 4:
 					redirect(base_url('representante-comite'));

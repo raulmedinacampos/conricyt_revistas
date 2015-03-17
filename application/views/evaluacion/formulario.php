@@ -4,7 +4,7 @@
 <script type="text/javascript" src="<?php echo base_url('scripts/evaluacion.js')?>"></script>
 <script type="text/javascript">
 <?php
-if($datos->estatus == 5) {
+if($datos->estatus == 5 || time() > strtotime("2015-03-09 12:00:00")) {
 ?>
 function desactivarCampos() {
 	$("input, textarea").prop("disabled", "disabled");
@@ -726,7 +726,7 @@ echo form_textarea($attr);
 echo '</div>';
 echo '</div>';
 
-if($datos->estatus != 5) {
+if($datos->estatus != 5 && time() < strtotime("2015-03-09 12:00:00")) {
 	echo '<div class="text-center">';
 	$attr = array(
 		'id'	=>	'btnGuardar',

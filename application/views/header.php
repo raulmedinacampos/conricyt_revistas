@@ -42,8 +42,19 @@
     		echo '<a href="http://www.conacyt.mx/index.php/el-conacyt/convocatorias-y-resultados-conacyt/convocatorias-indice-revistas-cyt-1/5048-convocatoria-de-revistas-2014-2015/file" target="_blank" style="margin-right:10px;"><span class="btn btn-info btn-sm"><strong>Convocatoria</strong></span></a>';
     		echo '<a href="http://www.conacyt.mx/index.php/el-conacyt/convocatorias-y-resultados-conacyt/convocatorias-indice-revistas-cyt-1/5047-criterios-de-revistas-2014-2015/file" target="_blank" style="margin-right:10px;"><span class="btn btn-info btn-sm"><strong>Criterios</strong></span></a>';
     		if(isset($area)) {
-    			echo '<a href="'.base_url('documentos/bibliometricos/rb'.$area.'.pdf').'" target="_blank"><span class="btn btn-info btn-sm"><strong>Reporte bibliométrico</strong></span></a>';
+    			echo '<a href="'.base_url('documentos/bibliometricos/rb'.$area.'.pdf').'" target="_blank" style="margin-right:10px;"><span class="btn btn-info btn-sm"><strong>Reporte bibliométrico</strong></span></a>';
     		}
+    		
+    		if($this->session->userdata('perfil') == 4) {
+    			echo '<a href="'.base_url('representante-comite/evaluacion').'" style="margin-right:10px;"><span class="btn btn-info btn-sm"><strong>Fallo final</strong></span></a>';
+    		}
+    		echo '</div>';
+    	}
+    	
+    	if($this->session->userdata('perfil') == 3) {
+    		echo '<div class="text-left col-sm-8">';
+    		echo '<a href="'.base_url('solicitud').'" style="margin-right:10px;"><span class="btn btn-info btn-sm"><strong>Solicitud</strong></span></a>';
+    		echo '<a href="'.base_url('solicitud/resultados').'" style="margin-right:10px;"><span class="btn btn-info btn-sm"><strong>Resultados</strong></span></a>';
     		echo '</div>';
     	}
     	
